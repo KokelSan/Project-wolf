@@ -4,6 +4,8 @@ using UnityEngine;
 [CustomEditor(typeof(HuggingFaceApiManager))]
 public class HuggingFaceApiManagerCustomEditor : Editor
 {
+    bool editInput = true;
+
     public override void OnInspectorGUI()
     {
         HuggingFaceApiManager apiManager = (HuggingFaceApiManager)target;
@@ -16,40 +18,23 @@ public class HuggingFaceApiManagerCustomEditor : Editor
             {
                 apiManager.AbortQuery();
             }
-
             return;
         }
 
-        GUILayout.Label("Configuration", EditorStyles.boldLabel);
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Input");
-        apiManager.Input = GUILayout.TextArea(apiManager.Input);
-        GUILayout.EndHorizontal();
-
+        EditorGUILayout.Space();
         apiManager.Model = (Model)EditorGUILayout.EnumPopup("Model", apiManager.Model);
 
-        GUILayout.Label("");
-        GUILayout.Label("Hugging Face", EditorStyles.boldLabel);        
-
-        if (GUILayout.Button("Start API Conversation"))
+        editInput = EditorGUILayout.Foldout(editInput, "Input");
+        if (editInput)
         {
-            apiManager.StartApiConversation();
+            EditorStyles.textField.wordWrap = true;
+            apiManager.Input = EditorGUILayout.TextArea(apiManager.Input);
         }
-
-        if (GUILayout.Button("Start API Text Generation"))
+        
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Start Generation"))
         {
-            apiManager.StartApiTextGeneration();
-        }
-
-        if (GUILayout.Button("Start API Example"))
-        {
-            apiManager.Query();
-        }
-
-        if (GUILayout.Button("Start Webservice Conversation"))
-        {
-            apiManager.StartCoroutine(apiManager.StartWebserviceConversation());
+            apiManager.StartGeneration();
         }
     }
 }
