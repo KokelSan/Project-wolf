@@ -1,14 +1,14 @@
 {
   "dependencies": {
     "com.huggingface.api": {
-      "version": "https://github.com/huggingface/unity-api.git",
+      "version": "https://github.com/KokelSan/hugging-face-unity-api_fork.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "com.unity.textmeshpro": "3.0.6",
         "com.unity.nuget.newtonsoft-json": "3.0.1"
       },
-      "hash": "8d0231780ead66aba3ad5ad3373158d5de0bc533"
+      "hash": "577f4e3d6d6347732d5ad35d44312c5e1f675939"
     },
     "com.unity.collab-proxy": {
       "version": "2.4.3",

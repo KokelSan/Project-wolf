@@ -1,6 +1,5 @@
 using UnityEngine;
 using HuggingFace.API;
-using HuggingFace.API.Editor;
 
 public class HuggingFaceApiManager : MonoBehaviour
 {
@@ -17,9 +16,17 @@ public class HuggingFaceApiManager : MonoBehaviour
 
     #region Text Generation
 
+    private const string API_TASK_NAME = "TextGeneration";
+
     public void StartGeneration()
     {
         if (isWaitingForResponse) return;
+
+        if (!Resources.Load<APIConfig>("HuggingFaceAPIConfig").SetTaskEndpoint(API_TASK_NAME, ApiEndpoints.GetUrl(Model)))
+        {
+            Debug.LogError($"Task {API_TASK_NAME} not found, query aborted.");
+            return;
+        }
 
         HuggingFaceAPI.TextGeneration(Input, OnGenerationSuccess, OnGenerationError);
         isWaitingForResponse = true;

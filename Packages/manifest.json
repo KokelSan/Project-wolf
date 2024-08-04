@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "com.huggingface.api": "https://github.com/huggingface/unity-api.git",
+    "com.huggingface.api": "https://github.com/KokelSan/hugging-face-unity-api_fork.git",
     "com.unity.collab-proxy": "2.4.3",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.6",
