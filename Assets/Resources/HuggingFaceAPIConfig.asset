@@ -13,14 +13,12 @@ MonoBehaviour:
   m_Name: HuggingFaceAPIConfig
   m_EditorClassIdentifier: 
   _apiKey: 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
-  _useBackupEndpoints: 1
+  _useBackupEndpoints: 0
   _waitForModel: 1
-  _maxTimeout: 10
+  _maxTimeout: 15
   _taskEndpoints:
   - taskName: AutomaticSpeechRecognition
     endpoint: https://api-inference.huggingface.co/models/openai/whisper-tiny
-  - taskName: Conversation
-    endpoint: https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill
   - taskName: QuestionAnswering
     endpoint: https://api-inference.huggingface.co/models/deepset/roberta-base-squad2
   - taskName: SentenceSimilarity
@@ -30,7 +28,7 @@ MonoBehaviour:
   - taskName: TextClassification
     endpoint: https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english
   - taskName: TextGeneration
-    endpoint: https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct
+    endpoint: https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3
   - taskName: TextToImage
     endpoint: https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5
   - taskName: Translation
