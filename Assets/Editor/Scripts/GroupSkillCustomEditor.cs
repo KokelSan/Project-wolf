@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(GroupSkill), true)]
 public class GroupSkillCustomEditor : Editor
@@ -21,10 +22,19 @@ public class GroupSkillCustomEditor : Editor
         }
         EditorGUILayout.Space();
 
-        skill.RelatedSkill = (AIndividualSkill)EditorGUILayout.ObjectField(nameof(skill.RelatedSkill), skill.RelatedSkill, typeof(AIndividualSkill), true);
+        skill.RelatedSkill = (AIndividualSkill)EditorGUILayout.ObjectField("Related Skill", skill.RelatedSkill, typeof(AIndividualSkill), true);
         EditorGUILayout.Space();
 
-        EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(skill.GroupMembers)), true);
+        skill.AllCharactersAreMembers = GUILayout.Toggle(skill.AllCharactersAreMembers, "All Characters are members", "Button");
+
+        if (skill.AllCharactersAreMembers)
+        {
+            skill.GroupMembers?.Clear();
+        }
+        else
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(skill.GroupMembers)), true);
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

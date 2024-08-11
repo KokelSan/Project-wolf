@@ -6,9 +6,9 @@ public abstract class AIndividualSkill : ASkill
 
     public ASkillFrequency Frequency;
 
-    public bool CanPerformOnAllCharacters = true;
-    public bool CanPerformOnSelf = true;
-    public List<Character> PotentialTargetTypes;
+    public bool TargetAllCharacters = true;
+    public bool CanSelfTarget = true;
+    public List<Character> TargetedCharacters;
 
     public override void Perform(ref List<Character> targets)
     {

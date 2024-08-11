@@ -6,6 +6,7 @@ using UnityEngine;
 public class GroupSkill : ASkill
 {
     public AIndividualSkill RelatedSkill;
+    public bool AllCharactersAreMembers = false;
     public List<Character> GroupMembers;
 
     public override void Perform(ref List<Character> targets)

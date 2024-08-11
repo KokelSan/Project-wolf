@@ -28,18 +28,17 @@ public class IndividualSkillCustomEditor : Editor
         EditorGUILayout.Space();
 
         GUILayout.BeginHorizontal();
-        skill.CanPerformOnAllCharacters = GUILayout.Toggle(skill.CanPerformOnAllCharacters, "Can Perform On All Characters", "Button");
-        skill.CanPerformOnSelf = GUILayout.Toggle(skill.CanPerformOnSelf, "Can Perform On Self", "Button");
+        skill.TargetAllCharacters = GUILayout.Toggle(skill.TargetAllCharacters, "Target All Characters", "Button");
+        skill.CanSelfTarget = GUILayout.Toggle(skill.CanSelfTarget, "Can Self Target", "Button");
         GUILayout.EndHorizontal();
 
-
-        if (skill.CanPerformOnAllCharacters)
+        if (skill.TargetAllCharacters)
         {
-            skill.PotentialTargetTypes?.Clear();
+            skill.TargetedCharacters?.Clear();
         }
         else
         {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(skill.PotentialTargetTypes)), true);
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(skill.TargetedCharacters)), true);
         }        
 
         serializedObject.ApplyModifiedProperties();
