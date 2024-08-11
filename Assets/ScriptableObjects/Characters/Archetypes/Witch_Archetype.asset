@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9327b5b9ae90fc44b88fab71bc4d9f0d, type: 3}
+  m_Name: Witch_Archetype
+  m_EditorClassIdentifier: 
+  Name: Witch
+  Description: The witch has two potions. The first one allows her to save and revive
+    a citizen sentenced to death, while the second one gives her the power to poison
+    and kill someone. Each potion can be used only once during the game.
+  IndividualSkills:
+  - {fileID: 11400000, guid: 2422349c31a4d0941a7a8a198109205b, type: 2}
+  - {fileID: 11400000, guid: 4aaddc884d3210142b811dcf77537259, type: 2}
+  GroupSkills: []

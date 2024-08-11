@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b9baf719a63de46aed59c7a7207f12, type: 3}
+  m_Name: Revive_1_Once
+  m_EditorClassIdentifier: 
+  Name: Revive one once
+  Description: Allow the character to revive a dead character, only once.
+  Frequency: {fileID: 11400000, guid: 5c99fe76a23e13b45b0955f84cf10e96, type: 2}
+  CanPerformOnAllCharacters: 0
+  PotentialTargetTypes: []
+  MaxTargetNbPerPerform: 1

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7441292e3a5c7904bb2f2f0ddb422917, type: 3}
+  m_Name: Kill_1_EachRound
+  m_EditorClassIdentifier: 
+  Name: Kill
+  Description: Allow the character to kill one target per round
+  Frequency: {fileID: 11400000, guid: 71f8e2b0d8a3f80439a227f31b491a2d, type: 2}
+  CanPerformOnAllCharacters: 1
+  PotentialTargetTypes: []
+  MaxTargetNbPerPerform: 1
