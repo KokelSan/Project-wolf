@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/New Archetype", fileName = "_ArchetypeSO")]
+[CreateAssetMenu(menuName = "Characters/New Archetype", fileName = "_Archetype")]
 public class Archetype : Character
 {
 

@@ -1,3 +1,4 @@
+using ExternalServices.HuggingFace;
 using UnityEditor;
 using UnityEngine;
 

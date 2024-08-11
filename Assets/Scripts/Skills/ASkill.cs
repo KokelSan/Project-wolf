@@ -6,8 +6,5 @@ public abstract class ASkill : ScriptableObject
     public string Name;
     public string Description;
 
-    public ASkillFrequency Frequency;
-    public List<Archetype> Targets;
-
-    public abstract void Perform();
+    public abstract void Perform(ref List<Character> targets);
 }
