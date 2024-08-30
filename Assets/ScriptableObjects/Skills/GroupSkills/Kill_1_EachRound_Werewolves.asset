@@ -15,5 +15,6 @@ MonoBehaviour:
   Name: Kill
   Description: Allow the group members to choose each round a target to kill
   RelatedSkill: {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
+  AllCharactersAreMembers: 0
   GroupMembers:
   - {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
