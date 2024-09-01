@@ -41,6 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4946966536338075509}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa5efc0ee7af9e949832a35a6cb91b23, type: 3}
+  m_Script: {fileID: 11500000, guid: 04078af284ec3e64f839b5addab90c7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Input: You are a creative game master for a Werevolves game session set in a western
+    atmosphere. Imagine the names of the characters, their roles and write the first
+    round of the game's story.
+  Model: 0
