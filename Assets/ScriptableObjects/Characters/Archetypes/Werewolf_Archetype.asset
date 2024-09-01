@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Werewolf_Archetype
   m_EditorClassIdentifier: 
   Name: Werewolf
-  Description: 
+  Description: Werevolves gather at night to determine which citizen will be the
+    central piece of their feast
   IndividualSkills: []
   GroupSkills:
-  - {fileID: 11400000, guid: 9861c83ddc6e50d45982e03f16298b7f, type: 2}
+  - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}

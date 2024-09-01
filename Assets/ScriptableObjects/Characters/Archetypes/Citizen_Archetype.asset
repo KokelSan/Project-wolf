@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Citizen_Archetype
   m_EditorClassIdentifier: 
   Name: Citizen
-  Description: 
+  Description: 'Citizens are very useful for the community : they are kind and do
+    nothing at night except sleeping'
   IndividualSkills: []
-  GroupSkills:
-  - {fileID: 11400000, guid: 2f80da9b94c0a5c4c9523fbcd7cf10da, type: 2}
+  GroupSkills: []

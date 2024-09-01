@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Kill
   Description: Allow the character to kill one target per round
+  LogActionVerb: 
+  TargetNb: 0
   Frequency: {fileID: 11400000, guid: 71f8e2b0d8a3f80439a227f31b491a2d, type: 2}
-  CanPerformOnAllCharacters: 1
-  PotentialTargetTypes: []
-  MaxTargetNbPerPerform: 1
+  CanTargetAllCharacters: 1
+  TargetedCharacters: []
+  CanSelfTarget: 0

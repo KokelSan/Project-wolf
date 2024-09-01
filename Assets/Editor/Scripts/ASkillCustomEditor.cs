@@ -1,8 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AIndividualSkill), true)]
-public class IndividualSkillCustomEditor : Editor
+[CustomEditor(typeof(ASkill), true)]
+public class ASkillCustomEditor : Editor
 {
     bool editDescription = true;
 
@@ -10,10 +10,10 @@ public class IndividualSkillCustomEditor : Editor
     {
         serializedObject.Update();
 
-        AIndividualSkill skill = (AIndividualSkill)target;
+        ASkill skill = (ASkill)target;
 
-        skill.Name = EditorGUILayout.TextField("Name", skill.Name);
-        
+        skill.ActionVerb = EditorGUILayout.TextField("Action verb", skill.ActionVerb);
+
         editDescription = EditorGUILayout.Foldout(editDescription, "Description");
         if (editDescription)
         {
@@ -28,18 +28,18 @@ public class IndividualSkillCustomEditor : Editor
         EditorGUILayout.Space();
 
         GUILayout.BeginHorizontal();
-        skill.TargetAllCharacters = GUILayout.Toggle(skill.TargetAllCharacters, "Target All Characters", "Button");
+        skill.CanTargetAllCharacters = GUILayout.Toggle(skill.CanTargetAllCharacters, "Target All Characters", "Button");
         skill.CanSelfTarget = GUILayout.Toggle(skill.CanSelfTarget, "Can Self Target", "Button");
         GUILayout.EndHorizontal();
 
-        if (skill.TargetAllCharacters)
+        if (skill.CanTargetAllCharacters)
         {
             skill.TargetedCharacters?.Clear();
         }
         else
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(skill.TargetedCharacters)), true);
-        }        
+        }
 
         serializedObject.ApplyModifiedProperties();
     }

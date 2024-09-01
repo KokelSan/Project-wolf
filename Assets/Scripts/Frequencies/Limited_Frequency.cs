@@ -5,15 +5,15 @@ public class Limited_Frequency : ASkillFrequency
 {
     [SerializeField] private int MaxUseNb;
 
-    private int useCount = 0;
+    private int executionCount = 0;
 
-    public override bool CanPerform()
+    public override bool CanExecute()
     {
-        return useCount < MaxUseNb;
+        return executionCount < MaxUseNb;
     }
     
     public override void Update() 
     {
-        useCount++;
+        executionCount++;
     }
 }

@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa267f15d42c3c4cbc9c670cdd3c408, type: 3}
   m_Name: Default_ResolutionOrder
   m_EditorClassIdentifier: 
-  OrderedCharacters: []
+  OrderedCharacters:
+  - {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
+  - {fileID: 11400000, guid: 1318d923de553ce46964311585ad5346, type: 2}

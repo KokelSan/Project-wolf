@@ -7,8 +7,8 @@ public class Character : ScriptableObject
     public string Name;
     public string Description;
 
-    public List<AIndividualSkill> IndividualSkills;
-    public List<GroupSkill> GroupSkills;
+    public List<ASkill> IndividualSkills;
+    public List<ASkill> GroupSkills;
 
     public bool IsAlive { get; private set; } = true;
 
