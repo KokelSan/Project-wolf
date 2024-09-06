@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(ASkill), true)]
+[CustomEditor(typeof(ASkillSO), true)]
 public class ASkillCustomEditor : Editor
 {
     bool editDescription = true;
@@ -10,7 +10,7 @@ public class ASkillCustomEditor : Editor
     {
         serializedObject.Update();
 
-        ASkill skill = (ASkill)target;
+        ASkillSO skill = (ASkillSO)target;
 
         skill.ActionVerb = EditorGUILayout.TextField("Action verb", skill.ActionVerb);
 
@@ -24,7 +24,7 @@ public class ASkillCustomEditor : Editor
 
         skill.TargetNb = EditorGUILayout.IntField("Target Number", skill.TargetNb);
 
-        skill.Frequency = (ASkillFrequency)EditorGUILayout.ObjectField(nameof(skill.Frequency), skill.Frequency, typeof(ASkillFrequency), true);
+        skill.Frequency = (ASkillFrequencySO)EditorGUILayout.ObjectField(nameof(skill.Frequency), skill.Frequency, typeof(ASkillFrequencySO), true);
         EditorGUILayout.Space();
 
         GUILayout.BeginHorizontal();

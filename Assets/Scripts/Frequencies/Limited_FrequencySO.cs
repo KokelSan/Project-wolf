@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Frequencies/New Limited Frequency", fileName = "_Frequency")]
-public class Limited_Frequency : ASkillFrequency
+public class Limited_FrequencySO : ASkillFrequencySO
 {
     [SerializeField] private int MaxUseNb;
 

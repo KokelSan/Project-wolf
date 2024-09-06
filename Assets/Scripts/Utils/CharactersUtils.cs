@@ -3,7 +3,7 @@ using System.Linq;
 
 public static class CharactersUtils
 {
-    public static string GetFormattedNames<T>(List<T> characters, bool onlyDistinctNames = true) where T : Character
+    public static string GetFormattedNames<T>(List<T> characters, bool onlyDistinctNames = true) where T : CharacterSO
     {
         List<string> names = characters.Select(x => x.Name).ToList();
 

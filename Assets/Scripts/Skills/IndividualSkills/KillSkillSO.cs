@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Skills/New Kill Skill", fileName = "Kill_TargetNb_Frequency")]
-public class KillSkill : ASkill
+public class KillSkillSO : ASkillSO
 {
-    protected override void Execute(Character target)
+    protected override void Execute(CharacterSO target)
     {
         target.Kill();
     }

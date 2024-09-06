@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-[CustomEditor(typeof(Character), true)]
+[CustomEditor(typeof(CharacterSO), true)]
 public class CharacterCustomEditor : Editor
 {
     bool editDescription = true;
@@ -9,7 +9,7 @@ public class CharacterCustomEditor : Editor
     {
         serializedObject.Update();
 
-        Character character = (Character)target;
+        CharacterSO character = (CharacterSO)target;
 
         character.Name = EditorGUILayout.TextField("Name", character.Name);
         

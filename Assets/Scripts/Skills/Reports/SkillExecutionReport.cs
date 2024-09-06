@@ -3,6 +3,6 @@
 public class SkillExecutionReport
 {
     public string SkillName;
-    public List<Character> Targets;    
+    public List<CharacterSO> Targets;    
     public string Log;
 }

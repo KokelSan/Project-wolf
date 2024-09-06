@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ASkill : ScriptableObject
+public abstract class ASkillSO : ScriptableObject
 {
     public string ActionVerb;
     public string Description;
 
     public int TargetNb;
 
-    public ASkillFrequency Frequency;
+    public ASkillFrequencySO Frequency;
 
     public bool CanTargetAllCharacters = true;
-    public List<Character> TargetedCharacters;
+    public List<CharacterSO> TargetedCharacters;
     public bool CanSelfTarget = false;
 
-    protected abstract void Execute(Character target);
+    protected abstract void Execute(CharacterSO target);
 
-    public virtual SkillExecutionReport Execute(List<Character> performers, List<Character> targets)
+    public virtual SkillExecutionReport Execute(List<CharacterSO> performers, List<CharacterSO> targets)
     {
         targets.ForEach(target => Execute(target));
         Frequency.Update();
@@ -24,7 +24,7 @@ public abstract class ASkill : ScriptableObject
         return GenerateExecutionReport(performers, targets);
     }    
 
-    protected SkillExecutionReport GenerateExecutionReport(List<Character> performers, List<Character> targets)
+    protected SkillExecutionReport GenerateExecutionReport(List<CharacterSO> performers, List<CharacterSO> targets)
     {
         return new SkillExecutionReport()
         {
