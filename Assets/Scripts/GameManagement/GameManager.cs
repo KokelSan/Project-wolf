@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class GameManager
+public class GameManager : MonoBehaviour
 {
+    public bool Debug = true;
+
     [SerializeField] private GameControlSO gameControl;
     [SerializeField] private List<Player> players;
 
@@ -11,39 +15,85 @@ public class GameManager
 
     #region Members Management
 
-    private void SetGameControl(GameControlSO _gameControl)
+    public void SetGameControl(GameControlSO _gameControl)
     {
         gameControl = _gameControl;
     }
 
-    private void SetPlayers(List<Player> _players)
+    public void SetPlayers(List<Player> _players)
     {
         players = _players;
     }
 
-    private void AddPlayer(Player player)
+    public void AddPlayer(Player player)
     {
         players.Add(player);
     }
 
-    private void RemovePlayer(Player player)
+    public void RemovePlayer(Player player)
     {
         players.Remove(player);
     }
 
     #endregion
 
-    private void PrepareGame()
+    public void PrepareGame()
     {
-
+        try
+        {
+            AttributionStrategy strategy = ComputeAttributionStrategy();
+            AssignCharactersToPlayers(strategy);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogError($"{e.Message}");
+        }
     }
 
-    private void AssignCharactersToPlayers()
+    public AttributionStrategy ComputeAttributionStrategy()
     {
+        AttributionStrategy strategy = AttributionStrategies.FirstOrDefault(strat => strat.PlayersNb >= players.Count);
 
+        if (strategy == null) 
+        {
+            throw new Exception($"No strategy found for {players.Count} players");
+        }
+
+        if (Debug)
+        {
+            UnityEngine.Debug.Log($"Strategy found for {players.Count} players : {strategy.PlayersNb} players");
+        }
+
+        return strategy;
     }
 
-    private void InitializeCharacters()
+    public void AssignCharactersToPlayers(AttributionStrategy strategy)
+    {
+        string debug = "Character assignation :";
+
+        List<CharacterSO> availableCharacters = strategy.GetAllAvailableCharacters();
+        foreach (Player player in players) 
+        {
+            int randomIndex = UnityEngine.Random.Range(0, availableCharacters.Count);
+            player.SetCharacterInstance(availableCharacters[randomIndex]);
+            availableCharacters.RemoveAt(randomIndex);
+
+            debug += $"\n  {player.Name} : {player.CharacterInstance.Name}";
+        }
+
+        if (availableCharacters.Any())
+        {
+            debug += $"Remaining characters : ";
+            availableCharacters.ForEach(character => debug += $"{character.Name}, ");
+        }
+
+        if (Debug)
+        {
+            debug
+        }
+    }
+
+    public void InitializeCharacters()
     {
 
     }
