@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TEST : MonoBehaviour
+public class Tests : MonoBehaviour
 {
     //public List<CharacterSO> List;
 

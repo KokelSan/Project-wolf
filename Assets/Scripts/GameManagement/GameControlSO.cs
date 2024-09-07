@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Game Management/New Game Control", fileName = "_GameControl")]
 public class GameControlSO : ScriptableObject
 {
-    public List<CharacterSO> ResolutionOrder;
+    public List<ASkillSO> ResolutionOrder;
     public List<AttributionStrategy> AttributionStrategies;
 }
 
@@ -22,23 +22,26 @@ public class AttributionStrategy
         {
             string type = distrib.Character.GetType().ToString();
             CharacterSO instance = ScriptableObject.CreateInstance(type) as CharacterSO;
+            
+            // TODO: rework the instantiation process, must clone all the data of the original character
 
             if (instance == null)
             {
                 Debug.LogWarning($"Impossible to cast from {type} to CharacterSO for SO '{distrib.Character.name}'");
                 continue;
             }
+            
+            Debug.Log($"Instance of type '{type}' created. Character name = {instance.Name} (original character name = {distrib.Character.Name})");
 
             characters.Add(instance);
         }
         return characters;
     }
-
 }
 
 [Serializable]
 public class CharacterDistribution
 {
     public CharacterSO Character;
-    public int MaxNb;
+    public int MaxNb = 1;
 }

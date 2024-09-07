@@ -5,34 +5,34 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public bool Debug = true;
+    public bool LogGameSteps = true;
 
-    [SerializeField] private GameControlSO gameControl;
-    [SerializeField] private List<Player> players;
+    [SerializeField] private GameControlSO _gameControl;
+    [SerializeField] private List<Player> _players;
 
-    private List<CharacterSO> ResolutionOrder => gameControl.ResolutionOrder;
-    private List<AttributionStrategy> AttributionStrategies => gameControl.AttributionStrategies;
+    private List<ASkillSO> ResolutionOrder => _gameControl.ResolutionOrder;
+    private List<AttributionStrategy> AttributionStrategies => _gameControl.AttributionStrategies;
 
     #region Members Management
 
-    public void SetGameControl(GameControlSO _gameControl)
+    public void SetGameControl(GameControlSO gameControl)
     {
-        gameControl = _gameControl;
+        _gameControl = gameControl;
     }
 
-    public void SetPlayers(List<Player> _players)
+    public void SetPlayers(List<Player> players)
     {
-        players = _players;
+        _players = players;
     }
 
     public void AddPlayer(Player player)
     {
-        players.Add(player);
+        _players.Add(player);
     }
 
     public void RemovePlayer(Player player)
     {
-        players.Remove(player);
+        _players.Remove(player);
     }
 
     #endregion
@@ -46,50 +46,52 @@ public class GameManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            UnityEngine.Debug.LogError($"{e.Message}");
+            Debug.LogError($"Game preparation error : {e.Message} \n\nStacktrace : \n{e.StackTrace}\n");
         }
     }
 
     public AttributionStrategy ComputeAttributionStrategy()
     {
-        AttributionStrategy strategy = AttributionStrategies.FirstOrDefault(strat => strat.PlayersNb >= players.Count);
+        AttributionStrategy strategy = AttributionStrategies.FirstOrDefault(strat => strat.PlayersNb >= _players.Count);
 
         if (strategy == null) 
         {
-            throw new Exception($"No strategy found for {players.Count} players");
+            throw new Exception($"No strategy found for {_players.Count} players");
         }
 
-        if (Debug)
+        if (LogGameSteps)
         {
-            UnityEngine.Debug.Log($"Strategy found for {players.Count} players : {strategy.PlayersNb} players");
+            string log = $"--- Strategy found for {_players.Count} players ---\n";
+            strategy.CharacterDistributions.ForEach(distribution => log += $"  {distribution.Character.Name} : {distribution.MaxNb}\n");
+            Debug.Log(log);
         }
-
+        
         return strategy;
     }
 
     public void AssignCharactersToPlayers(AttributionStrategy strategy)
     {
-        string debug = "Character assignation :";
+        string log = "--- Character assignation ---";
 
         List<CharacterSO> availableCharacters = strategy.GetAllAvailableCharacters();
-        foreach (Player player in players) 
+        foreach (Player player in _players) 
         {
             int randomIndex = UnityEngine.Random.Range(0, availableCharacters.Count);
             player.SetCharacterInstance(availableCharacters[randomIndex]);
             availableCharacters.RemoveAt(randomIndex);
 
-            debug += $"\n  {player.Name} : {player.CharacterInstance.Name}";
+            log += $"\n  {player.Name} : {player.CharacterInstance.name}";
         }
 
         if (availableCharacters.Any())
         {
-            debug += $"Remaining characters : ";
-            availableCharacters.ForEach(character => debug += $"{character.Name}, ");
+            log += $"Remaining characters : ";
+            availableCharacters.ForEach(character => log += $"{character.Name}, ");
         }
 
-        if (Debug)
+        if (LogGameSteps)
         {
-            debug
+            Debug.Log($"{log}\n");
         }
     }
 
