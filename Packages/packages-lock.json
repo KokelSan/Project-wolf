@@ -8,7 +8,16 @@
         "com.unity.textmeshpro": "3.0.6",
         "com.unity.nuget.newtonsoft-json": "3.0.1"
       },
-      "hash": "4ac31953baebc1a88f52a0b65d13c88703d3a7de"
+      "hash": "ba6ef67ab0525ac88ffc00c6e5d4d221a04d3fbc"
+    },
+    "com.kokelsan.editor-attributes": {
+      "version": "https://github.com/KokelSan/EditorAttributes.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1"
+      },
+      "hash": "1bc7df8c865fc8508f0555f5f67e78fcba3eddc2"
     },
     "com.unity.collab-proxy": {
       "version": "2.4.3",
@@ -128,7 +137,6 @@
       "dependencies": {
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
