@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Player> _players;
 
     private List<ASkillSO> ResolutionOrder => _gameControl.ResolutionOrder;
-    private List<AttributionStrategy> AttributionStrategies => _gameControl.AttributionStrategies;
+    private List<DistributionStrategy> DistributionStrategies => _gameControl.DistributionStrategies;
 
     #region Members Management
 
@@ -37,22 +37,34 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    public void PrepareGame()
+    private void CheckGameRequirements()
     {
+        if (_gameControl == null) throw new Exception($"There is no game control");
+        if (ResolutionOrder == null) throw new Exception($"There is no resolution order");
+        if (DistributionStrategies == null) throw new Exception($"There is no distribution strategies");
+
+        if (_players?.Any() != true) throw new Exception($"The players list is empty or null");
+        if (DistributionStrategies?.First()?.PlayersNb > _players.Count) throw new Exception($"There are not enough players to play");
+    }
+
+    public void PrepareGame()
+    {    
         try
         {
-            AttributionStrategy strategy = ComputeAttributionStrategy();
+            CheckGameRequirements();
+
+            DistributionStrategy strategy = ComputeDistributionStrategy();
             AssignCharactersToPlayers(strategy);
         }
         catch (Exception e)
         {
-            Debug.LogError($"Game preparation error : {e.Message} \n\nStacktrace : \n{e.StackTrace}\n");
+            Debug.LogError($"Game aborted : {e.Message} \n\n{e.ToString()}\n");
         }
-    }
+    }    
 
-    public AttributionStrategy ComputeAttributionStrategy()
+    private DistributionStrategy ComputeDistributionStrategy()
     {
-        AttributionStrategy strategy = AttributionStrategies.FirstOrDefault(strat => strat.PlayersNb >= _players.Count);
+        DistributionStrategy strategy = DistributionStrategies.FirstOrDefault(strat => strat.PlayersNb >= _players.Count);
 
         if (strategy == null) 
         {
@@ -69,24 +81,24 @@ public class GameManager : MonoBehaviour
         return strategy;
     }
 
-    public void AssignCharactersToPlayers(AttributionStrategy strategy)
+    private void AssignCharactersToPlayers(DistributionStrategy strategy)
     {
         string log = "--- Character assignation ---";
 
-        List<CharacterSO> availableCharacters = strategy.GetAllAvailableCharacters();
+        List<CharacterSO> availableCharacters = CharacterFactory.CreateCharactersFromDistributions(strategy.CharacterDistributions);
         foreach (Player player in _players) 
         {
             int randomIndex = UnityEngine.Random.Range(0, availableCharacters.Count);
             player.SetCharacterInstance(availableCharacters[randomIndex]);
             availableCharacters.RemoveAt(randomIndex);
 
-            log += $"\n  {player.Name} : {player.CharacterInstance.name}";
+            log += $"\n  {player.Name} : {player.CharacterInstance.Name} ({player.CharacterInstance.name})";
         }
 
         if (availableCharacters.Any())
         {
-            log += $"Remaining characters : ";
-            availableCharacters.ForEach(character => log += $"{character.Name}, ");
+            log += $"\n  Unassigned : ";
+            availableCharacters.ForEach(character => log += $"{character.Name} {(character == availableCharacters.Last() ? "" : ", ")}");
         }
 
         if (LogGameSteps)
@@ -95,7 +107,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void InitializeCharacters()
+    private void InitializeCharacters()
     {
 
     }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TestManager : MonoBehaviour
 {   
+    public GameControlSO GameControlSO;
+    public int PlayersNb;
+
     void Start()
     {
         PrepareGame();
@@ -11,18 +14,19 @@ public class TestManager : MonoBehaviour
 
     public void PrepareGame()
     {
-        GameManager gameManager = FindFirstObjectByType<GameManager>();
-        if (gameManager == null)
-        {
-            Debug.LogWarning("TEST: No GameManager found in the current scene. Test aborted.");
-            return;
-        }
-
-        Player playerA = new Player(new Guid(), "Player A");
-        Player playerB = new Player(new Guid(), "Player B");
-        Player playerC = new Player(new Guid(), "Player C");
-        gameManager.SetPlayers(new List<Player> { playerA, playerB, playerC });
-
+        GameManager gameManager = gameObject.AddComponent<GameManager>();
+        gameManager.SetGameControl(GameControlSO);
+        gameManager.SetPlayers(CreatePlayers());
         gameManager.PrepareGame();
     }    
+
+    private List<Player> CreatePlayers()
+    {
+        List<Player> players = new List<Player>();
+        for (int i = 1; i <= PlayersNb; i++)
+        {
+            players.Add(new Player(new Guid(), $"Player {i}"));
+        }
+        return players;
+    }
 }
