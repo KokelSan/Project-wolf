@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5b9baf719a63de46aed59c7a7207f12, type: 3}
   m_Name: Revive_1_Once
   m_EditorClassIdentifier: 
-  Name: Revive one once
+  ActionVerb: revive
   Description: Allow the character to revive a dead character, only once.
+  TargetNb: 1
   Frequency: {fileID: 11400000, guid: 5c99fe76a23e13b45b0955f84cf10e96, type: 2}
-  CanPerformOnAllCharacters: 0
-  PotentialTargetTypes: []
-  MaxTargetNbPerPerform: 1
+  Options: 3
+  Targets:
+    Characters: []

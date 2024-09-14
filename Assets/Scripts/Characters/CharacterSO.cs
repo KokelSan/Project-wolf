@@ -5,10 +5,10 @@ using UnityEngine;
 public class CharacterSO : ScriptableObject
 {
     public string Name;
-    public string Description;
+    [TextArea(2, 10)] public string Description;
 
-    public List<ASkillSO> IndividualSkills;
-    public List<ASkillSO> GroupSkills;
+    [Space] public List<ASkillSO> IndividualSkills;
+    [Space] public List<ASkillSO> GroupSkills;
 
     private List<ASkillSO> individualSkills_Instantiated;
     private List<ASkillSO> groupSkills_Instantiated;

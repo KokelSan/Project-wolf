@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7441292e3a5c7904bb2f2f0ddb422917, type: 3}
   m_Name: Kill_1_Once
   m_EditorClassIdentifier: 
-  Name: Kill
+  ActionVerb: kill
   Description: Allow the character to kill one target per round
-  LogActionVerb: killed
   TargetNb: 1
   Frequency: {fileID: 11400000, guid: 71f8e2b0d8a3f80439a227f31b491a2d, type: 2}
-  CanTargetAllCharacters: 1
-  TargetedCharacters: []
-  CanSelfTarget: 1
+  Options: 3
+  Targets:
+    Characters: []

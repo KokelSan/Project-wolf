@@ -1,18 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using EditorAttributes;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ASkillSO : ScriptableObject
+[Flags]
+public enum SkillOptions
 {
+    Nothing = 0,
+    CanSelfTarget = 1,
+    CanTargetAllCharacters = 2,
+}
+
+[Serializable]
+public class TargetedCharacters
+{
+    public List<CharacterSO> Characters;
+}
+
+public abstract class ASkillSO : ScriptableObject
+{  
     public string ActionVerb;
-    public string Description;
+    [TextArea(2, 10)] public string Description;
 
     public int TargetNb;
 
     public ASkillFrequencySO Frequency;
 
-    public bool CanTargetAllCharacters = true;
-    public List<CharacterSO> TargetedCharacters;
-    public bool CanSelfTarget = false;
+    [SelectionButtons(showLabel: false)]
+    public SkillOptions Options;
+    private bool showTargets => !Options.HasFlag(SkillOptions.CanTargetAllCharacters);
+
+    [ShowIf(nameof(showTargets))] 
+    public TargetedCharacters Targets;
 
     protected abstract void Execute(CharacterSO target);
 
