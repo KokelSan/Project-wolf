@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tests : MonoBehaviour
-{
-    //public List<CharacterSO> List;
-
+public class TestManager : MonoBehaviour
+{   
     void Start()
+    {
+        PrepareGame();
+    }
+
+    public void PrepareGame()
     {
         GameManager gameManager = FindFirstObjectByType<GameManager>();
         if (gameManager == null)
@@ -21,5 +24,5 @@ public class Tests : MonoBehaviour
         gameManager.SetPlayers(new List<Player> { playerA, playerB, playerC });
 
         gameManager.PrepareGame();
-    }
+    }    
 }
