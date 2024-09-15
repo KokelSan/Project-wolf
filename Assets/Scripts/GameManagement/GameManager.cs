@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -98,7 +99,12 @@ public class GameManager : MonoBehaviour
         if (availableCharacters.Any())
         {
             log += $"\n  Unassigned : ";
-            availableCharacters.ForEach(character => log += $"{character.Name} {(character == availableCharacters.Last() ? "" : ", ")}");
+            availableCharacters.ForEach(character =>
+            {
+                log += $"{character.Name} {(character == availableCharacters.Last() ? "" : ", ")}";
+                DestroyImmediate(character);
+            });
+            availableCharacters.Clear();
         }
 
         if (LogGameSteps)
