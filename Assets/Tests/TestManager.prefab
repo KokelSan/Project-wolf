@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0545c52c8f24232419473217f1c8d376, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameControlSO: {fileID: 11400000, guid: 918b13445a945334abc6f09f5db24b02, type: 2}
+  PlayersNb: 3

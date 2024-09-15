@@ -1,23 +1,22 @@
+using EditorAttributes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TestManager : MonoBehaviour
-{   
-    public GameControlSO GameControlSO;
+{
+    [PropertyDropdown] public GameControlSO GameControlSO;
     public int PlayersNb;
 
-    void Start()
-    {
-        PrepareGame();
-    }
-
+    [Button("Test Game Preparation")]
     public void PrepareGame()
     {
         GameManager gameManager = gameObject.AddComponent<GameManager>();
         gameManager.SetGameControl(GameControlSO);
         gameManager.SetPlayers(CreatePlayers());
         gameManager.PrepareGame();
+
+        DestroyImmediate(gameManager);
     }    
 
     private List<Player> CreatePlayers()
