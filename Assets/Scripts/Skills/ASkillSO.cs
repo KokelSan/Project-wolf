@@ -8,11 +8,11 @@ public enum SkillOptions
 {
     Nothing = 0,
     CanSelfTarget = 1,
-    CanTargetAllCharacters = 2,
+    TargetSpecificCharacters = 2
 }
 
 [Serializable]
-public class TargetedCharacters
+public class AuthorizedTargets
 {
     public List<CharacterSO> Characters;
 }
@@ -26,12 +26,24 @@ public abstract class ASkillSO : ScriptableObject
 
     public ASkillFrequencySO Frequency;
 
-    [SelectionButtons(showLabel: false)]
-    public SkillOptions Options;
-    private bool showTargets => !Options.HasFlag(SkillOptions.CanTargetAllCharacters);
+    [SelectionButtons(showLabel: false)] public SkillOptions Options = SkillOptions.CanSelfTarget;
+    [HideInInspector] public bool CanSelfTarget, TargetSpecificCharacters; private bool hideTargetsList;
 
-    [ShowIf(nameof(showTargets))] 
-    public TargetedCharacters Targets;
+    [HideIf(nameof(hideTargetsList)), ShowIf(nameof(TargetSpecificCharacters))]
+    public AuthorizedTargets AuthorizedTargets;
+
+    private void OnValidate()
+    {
+        hideTargetsList = !Options.HasFlag(SkillOptions.TargetSpecificCharacters);
+
+        if (TargetSpecificCharacters && hideTargetsList) // last state was to show the list, the new state is to hide it
+        {
+            AuthorizedTargets.Characters.Clear();
+        }
+
+        TargetSpecificCharacters = !hideTargetsList;
+        CanSelfTarget = Options.HasFlag(SkillOptions.CanSelfTarget);  
+    }
 
     protected abstract void Execute(CharacterSO target);
 
