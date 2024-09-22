@@ -17,8 +17,8 @@ public class CharacterSO : InstantiableSO
 
     protected override void Initialize()
     {
-        individualSkills_Instantiated = ScriptableObjectFactory.CreateInstances(IndividualSkills);
-        groupSkills_Instantiated = ScriptableObjectFactory.CreateInstances(GroupSkills);
+        individualSkills_Instantiated = InstantiableSOFactory.CreateInstances(IndividualSkills);
+        groupSkills_Instantiated = InstantiableSOFactory.CreateInstances(GroupSkills);
     }
 
     public void Kill()

@@ -48,7 +48,7 @@ public abstract class ASkillSO : InstantiableSO
 
     protected override void Initialize()
     {
-        frequency_Instantiated = ScriptableObjectFactory.CreateInstance(Frequency);
+        frequency_Instantiated = InstantiableSOFactory.CreateInstance(Frequency);
     }
 
     protected abstract void Execute(CharacterSO target);

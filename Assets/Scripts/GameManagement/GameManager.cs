@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
             CheckGameRequirements();
 
             DistributionStrategy strategy = ComputeDistributionStrategy();
-            AssignCharactersToPlayers(strategy);
+            CreateAndAssignCharactersToPlayers(strategy);
         }
         catch (Exception e)
         {
@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         return strategy;
     }
 
-    private void AssignCharactersToPlayers(DistributionStrategy strategy)
+    private void CreateAndAssignCharactersToPlayers(DistributionStrategy strategy)
     {
         string log = "--- Character assignation ---";
 

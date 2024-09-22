@@ -26,7 +26,7 @@ public static class CharacterFactory
             int index = randomizeResultList ? Random.Range(0, availableCharacters.Count) : i;
             CharacterSO character = availableCharacters[index];
 
-            CharacterSO instance = ScriptableObjectFactory.CreateInstance(character);
+            CharacterSO instance = InstantiableSOFactory.CreateInstance(character);
             characters.Add(instance);
 
             if (randomizeResultList) availableCharacters.RemoveAt(index);

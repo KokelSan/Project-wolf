@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ScriptableObjectFactory
+public static class InstantiableSOFactory
 {
     private static readonly Dictionary<string, int> instancesSuffixes = new Dictionary<string, int>();
 

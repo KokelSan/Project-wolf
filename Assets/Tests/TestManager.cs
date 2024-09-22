@@ -16,7 +16,7 @@ public class TestManager : MonoBehaviour
     [Button("Test Game Preparation")]
     public void PrepareGame()
     {
-        ScriptableObjectFactory.CleanDictionnary();
+        InstantiableSOFactory.CleanDictionnary();
 
         GameManager gameManager = gameObject.AddComponent<GameManager>();
         gameManager.SetGameControl(GameControlSO);
