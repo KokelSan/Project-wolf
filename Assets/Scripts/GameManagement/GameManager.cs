@@ -65,11 +65,11 @@ public class GameManager : MonoBehaviour
 
     private DistributionStrategy ComputeDistributionStrategy()
     {
-        DistributionStrategy strategy = DistributionStrategies.FirstOrDefault(strat => strat.PlayersNb >= _players.Count);
+        DistributionStrategy strategy = DistributionStrategies.FirstOrDefault(strat => strat.IsValidForPlayersCount(_players.Count));
 
         if (strategy == null) 
         {
-            throw new Exception($"No strategy found for {_players.Count} players");
+            throw new Exception($"No valid strategy found for {_players.Count} players");
         }
 
         if (LogGameSteps)
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
     {
         string log = "--- Character assignation ---";
 
-        List<CharacterSO> availableCharacters = CharacterFactory.CreateCharactersFromDistributions(strategy.CharacterDistributions);
+        List<CharacterSO> availableCharacters = CharacterFactory.InstantiateFromDistributionStrategy(strategy, _players.Count, out string unassignedLog);
         foreach (Player player in _players) 
         {
             int randomIndex = UnityEngine.Random.Range(0, availableCharacters.Count);
@@ -96,15 +96,9 @@ public class GameManager : MonoBehaviour
             log += $"\n  {player.Name} : {player.CharacterInstance.Name} ({player.CharacterInstance.name})";
         }
 
-        if (availableCharacters.Any())
+        if (!string.IsNullOrEmpty(unassignedLog))
         {
-            log += $"\n  Unassigned : ";
-            availableCharacters.ForEach(character =>
-            {
-                log += $"{character.Name} {(character == availableCharacters.Last() ? "" : ", ")}";
-                DestroyImmediate(character);
-            });
-            availableCharacters.Clear();
+            log += $"\n  {unassignedLog}";
         }
 
         if (LogGameSteps)

@@ -29,7 +29,7 @@ public abstract class ASkillSO : ScriptableObject
     [SelectionButtons(showLabel: false)] public SkillOptions Options = SkillOptions.CanSelfTarget;
     [HideInInspector] public bool CanSelfTarget, TargetSpecificCharacters; private bool hideTargetsList;
 
-    [HideIf(nameof(hideTargetsList)), ShowIf(nameof(TargetSpecificCharacters))]
+    [ShowIf(nameof(TargetSpecificCharacters)), HideIf(nameof(hideTargetsList))]
     public AuthorizedTargets AuthorizedTargets;
 
     private void OnValidate()

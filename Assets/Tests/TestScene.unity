@@ -133,7 +133,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 849188914183258404, guid: 97943dc468e02c448b5d5a426ab3cbbd, type: 3}
       propertyPath: PlayersNb
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 849188914183258404, guid: 97943dc468e02c448b5d5a426ab3cbbd, type: 3}
       propertyPath: GameControlSO
