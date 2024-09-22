@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Test_GameControl
   m_EditorClassIdentifier: 
   ResolutionOrder:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
   DistributionStrategies:
   - PlayersNb: 1
     CharacterDistributions:

@@ -53,7 +53,7 @@ public abstract class ASkillSO : InstantiableSO
     protected override void Initialize()
     {
         if (!TryGetParentAs(out ASkillSO parent))
-            throw new Exception($"Impossible to cast ParentSO to ASkillSO for {name} ({InstanceId})");
+            throw new Exception($"Impossible to cast ParentSO to ASkillSO for instance {name} ({InstanceId})");
 
         Frequency = InstantiableSOFactory.CreateInstance(parent.Frequency);
     }

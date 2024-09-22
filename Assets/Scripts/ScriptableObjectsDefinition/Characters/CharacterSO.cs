@@ -16,7 +16,7 @@ public class CharacterSO : InstantiableSO
     protected override void Initialize()
     {
         if (!TryGetParentAs(out CharacterSO parent))
-            throw new Exception($"Impossible to cast ParentSO to CharacterSO for {name} ({InstanceId})");
+            throw new Exception($"Impossible to cast ParentSO to CharacterSO for instance {name} ({InstanceId})");
 
         IndividualSkills = InstantiableSOFactory.CreateInstances(parent.IndividualSkills);
         GroupSkills = InstantiableSOFactory.CreateInstances(parent.GroupSkills);
