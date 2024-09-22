@@ -13,4 +13,10 @@ public abstract class InstantiableSO : ScriptableObject, IInstantiableSO
     }
 
     protected abstract void Initialize();
+
+    protected bool TryGetParentAs<T>(out T parent) where T : InstantiableSO
+    {
+        parent = ParentSO as T;
+        return parent != null;
+    }
 }

@@ -25,13 +25,15 @@ public abstract class ASkillSO : InstantiableSO
     public int TargetNb;
 
     public ASkillFrequencySO Frequency;
-    private ASkillFrequencySO frequency_Instantiated;
 
-    [SelectionButtons(showLabel: false)] public SkillOptions Options = SkillOptions.CanSelfTarget;
-    [HideInInspector] public bool CanSelfTarget, TargetSpecificCharacters; private bool hideTargetsList;
+    [SelectionButtons(showLabel: false)] public SkillOptions Options = SkillOptions.CanSelfTarget;    
 
     [ShowIf(nameof(TargetSpecificCharacters)), HideIf(nameof(hideTargetsList))]
     public AuthorizedTargets AuthorizedTargets;
+
+    #region Flags Computation
+
+    [HideInInspector] public bool CanSelfTarget, TargetSpecificCharacters; private bool hideTargetsList;
 
     private void OnValidate()
     {
@@ -43,12 +45,17 @@ public abstract class ASkillSO : InstantiableSO
         }
 
         TargetSpecificCharacters = !hideTargetsList;
-        CanSelfTarget = Options.HasFlag(SkillOptions.CanSelfTarget);  
-    }
+        CanSelfTarget = Options.HasFlag(SkillOptions.CanSelfTarget);
+    } 
+
+    #endregion
 
     protected override void Initialize()
     {
-        frequency_Instantiated = InstantiableSOFactory.CreateInstance(Frequency);
+        if (!TryGetParentAs(out ASkillSO parent))
+            throw new Exception($"Impossible to cast ParentSO to ASkillSO for {name} ({InstanceId})");
+
+        Frequency = InstantiableSOFactory.CreateInstance(parent.Frequency);
     }
 
     protected abstract void Execute(CharacterSO target);

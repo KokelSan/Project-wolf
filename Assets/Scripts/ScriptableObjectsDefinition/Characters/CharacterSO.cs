@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [CreateAssetMenu(menuName = "Characters/New Character", fileName = "_Character")]
 public class CharacterSO : InstantiableSO
@@ -10,15 +11,15 @@ public class CharacterSO : InstantiableSO
     [Space] public List<ASkillSO> IndividualSkills;
     [Space] public List<ASkillSO> GroupSkills;
 
-    [HideInInspector] public List<ASkillSO> individualSkills_Instantiated;
-    private List<ASkillSO> groupSkills_Instantiated;
-
     public bool IsAlive { get; private set; }
 
     protected override void Initialize()
     {
-        individualSkills_Instantiated = InstantiableSOFactory.CreateInstances(IndividualSkills);
-        groupSkills_Instantiated = InstantiableSOFactory.CreateInstances(GroupSkills);
+        if (!TryGetParentAs(out CharacterSO parent))
+            throw new Exception($"Impossible to cast ParentSO to CharacterSO for {name} ({InstanceId})");
+
+        IndividualSkills = InstantiableSOFactory.CreateInstances(parent.IndividualSkills);
+        GroupSkills = InstantiableSOFactory.CreateInstances(parent.GroupSkills);
     }
 
     public void Kill()
