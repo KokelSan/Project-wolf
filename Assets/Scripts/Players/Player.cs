@@ -6,15 +6,15 @@ public class Player
     public string Name { get; private set; }
     public CharacterSO CharacterInstance { get; private set; }
 
-    public Player(Guid id, string name, CharacterSO character = null) 
+    public Player(Guid id, string name, CharacterSO characterInstance = null) 
     {
         Id = id;
         Name = name;
-        CharacterInstance = character;
+        CharacterInstance = characterInstance;
     }
 
-    public void SetCharacterInstance(CharacterSO character)
+    public void SetCharacterInstance(CharacterSO characterInstance)
     {
-        CharacterInstance = character;
+        CharacterInstance = characterInstance;
     }
 }

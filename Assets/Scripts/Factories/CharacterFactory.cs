@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public static class CharacterFactory 
 {  
@@ -20,28 +19,14 @@ public static class CharacterFactory
         }
 
         // Then the characters are instantiated, randomly or not
-        List<CharacterSO> characters = new List<CharacterSO>();
-        Dictionary<string, int> instancesSuffixes = new Dictionary<string, int>();
-        string ComputeInstanceName(string name)
-        {
-            if (instancesSuffixes.ContainsKey(name))
-            {
-                return $"{name}_{++instancesSuffixes[name]}";
-            }
-            else
-            {
-                instancesSuffixes[name] = 0;
-                return $"{name}_0";
-            }
-        }
+        List<CharacterSO> characters = new List<CharacterSO>();        
 
         for (int i = 0; i < playersCount; i++)
         {
             int index = randomizeResultList ? Random.Range(0, availableCharacters.Count) : i;
             CharacterSO character = availableCharacters[index];
 
-            CharacterSO instance = ScriptableObjectFactory<CharacterSO>.CreateInstance(character);
-            instance.name = ComputeInstanceName(character.name);
+            CharacterSO instance = ScriptableObjectFactory.CreateInstance(character);
             characters.Add(instance);
 
             if (randomizeResultList) availableCharacters.RemoveAt(index);

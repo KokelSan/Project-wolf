@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Characters/New Character", fileName = "_Character")]
-public class CharacterSO : ScriptableObject
+public class CharacterSO : InstantiableSO
 {
     public string Name;
     [TextArea(2, 10)] public string Description;
@@ -10,16 +10,15 @@ public class CharacterSO : ScriptableObject
     [Space] public List<ASkillSO> IndividualSkills;
     [Space] public List<ASkillSO> GroupSkills;
 
-    private List<ASkillSO> individualSkills_Instantiated;
+    [HideInInspector] public List<ASkillSO> individualSkills_Instantiated;
     private List<ASkillSO> groupSkills_Instantiated;
 
     public bool IsAlive { get; private set; }
 
-    public void Initialize(List<ASkillSO> _individualSkills_Instantiated, List<ASkillSO> _groupSkills_Instantiated)
+    protected override void Initialize()
     {
-        individualSkills_Instantiated = _individualSkills_Instantiated;
-        groupSkills_Instantiated = _groupSkills_Instantiated;
-        IsAlive = true;
+        individualSkills_Instantiated = ScriptableObjectFactory.CreateInstances(IndividualSkills);
+        groupSkills_Instantiated = ScriptableObjectFactory.CreateInstances(GroupSkills);
     }
 
     public void Kill()

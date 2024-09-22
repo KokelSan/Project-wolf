@@ -1,19 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public static class ScriptableObjectFactory<T> where T : ScriptableObject
-{  
-    public static T CreateInstance(T scriptableObject) 
+public static class ScriptableObjectFactory
+{
+    private static readonly Dictionary<string, int> instancesSuffixes = new Dictionary<string, int>();
+
+    public static T CreateInstance<T>(T scriptableObject) where T : ScriptableObject, IInstantiableSO
     {
         T instance = ScriptableObject.Instantiate<T>(scriptableObject);
-        //LogInstanceCreation(instance, scriptableObject);
+        instance.name = ComputeInstanceName(scriptableObject.name);
+        instance.Initialize(scriptableObject);
         return instance;
     }
 
-    private static void LogInstanceCreation(T instance, T original)
+    public static List<T> CreateInstances<T>(List<T> scriptableObjectList) where T : ScriptableObject, IInstantiableSO
     {
-        Debug.Log(
-            $"Instance '{instance.name}' of type '{instance.GetType()}' created." +
-            $"\n  Instance Id = {instance.GetInstanceID()}" +
-            $"\n  Original Id = {original.GetInstanceID()}\n");
+        List<T> instances = new List<T>();
+        foreach (T scriptableObject in scriptableObjectList)
+        {
+            instances.Add(CreateInstance(scriptableObject));
+        }
+        return instances;
+    }
+
+    private static string ComputeInstanceName(string name)
+    {
+        if (instancesSuffixes.ContainsKey(name))
+        {
+            return $"{name}_{++instancesSuffixes[name]}";
+        }
+        else
+        {
+            instancesSuffixes[name] = 0;
+            return $"{name}_0";
+        }
+    }
+
+    public static void CleanDictionnary()
+    {
+        instancesSuffixes.Clear();
     }
 }

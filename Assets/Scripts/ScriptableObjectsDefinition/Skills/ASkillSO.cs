@@ -17,14 +17,15 @@ public class AuthorizedTargets
     public List<CharacterSO> Characters;
 }
 
-public abstract class ASkillSO : ScriptableObject
-{  
+public abstract class ASkillSO : InstantiableSO
+{
     public string ActionVerb;
     [TextArea(2, 10)] public string Description;
 
     public int TargetNb;
 
     public ASkillFrequencySO Frequency;
+    private ASkillFrequencySO frequency_Instantiated;
 
     [SelectionButtons(showLabel: false)] public SkillOptions Options = SkillOptions.CanSelfTarget;
     [HideInInspector] public bool CanSelfTarget, TargetSpecificCharacters; private bool hideTargetsList;
@@ -43,6 +44,11 @@ public abstract class ASkillSO : ScriptableObject
 
         TargetSpecificCharacters = !hideTargetsList;
         CanSelfTarget = Options.HasFlag(SkillOptions.CanSelfTarget);  
+    }
+
+    protected override void Initialize()
+    {
+        frequency_Instantiated = ScriptableObjectFactory.CreateInstance(Frequency);
     }
 
     protected abstract void Execute(CharacterSO target);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -41,11 +40,11 @@ public class GameManager : MonoBehaviour
     private void CheckGameRequirements()
     {
         if (_gameControl == null) throw new Exception($"There is no game control");
-        if (ResolutionOrder == null) throw new Exception($"There is no resolution order");
-        if (DistributionStrategies == null) throw new Exception($"There is no distribution strategies");
+        if (ResolutionOrder?.Any() != true) throw new Exception($"The resolution order is null or empty");
+        if (DistributionStrategies?.Any() != true) throw new Exception($"The distribution strategies are null or empty");
 
-        if (_players?.Any() != true) throw new Exception($"The players list is empty or null");
-        if (DistributionStrategies?.First()?.PlayersNb > _players.Count) throw new Exception($"There are not enough players to play");
+        if (_players?.Any() != true) throw new Exception($"The players list is null or empty");
+        if (DistributionStrategies.OrderBy(strat => strat.PlayersNb).First()?.PlayersNb > _players.Count) throw new Exception($"There are not enough players to play");
     }
 
     public void PrepareGame()
@@ -65,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     private DistributionStrategy ComputeDistributionStrategy()
     {
-        DistributionStrategy strategy = DistributionStrategies.FirstOrDefault(strat => strat.IsValidForPlayersCount(_players.Count));
+        DistributionStrategy strategy = DistributionStrategies.OrderBy(strat => strat.PlayersNb).FirstOrDefault(strat => strat.IsValidForPlayersCount(_players.Count));
 
         if (strategy == null) 
         {
@@ -105,10 +104,5 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log($"{log}\n");
         }
-    }
-
-    private void InitializeCharacters()
-    {
-
     }
 }
