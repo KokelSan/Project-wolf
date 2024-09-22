@@ -14,21 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ResolutionOrder: []
   DistributionStrategies:
-  - PlayersNb: 2
-    CharacterDistributions:
-    - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
-      MaxNb: 1
-    - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
-      MaxNb: 1
-  - PlayersNb: 3
-    CharacterDistributions:
-    - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
-      MaxNb: 2
-    - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
-      MaxNb: 1
   - PlayersNb: 5
     CharacterDistributions:
     - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
       MaxNb: 3
     - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
       MaxNb: 2
+  - PlayersNb: 8
+    CharacterDistributions:
+    - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
+      MaxNb: 5
+    - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
+      MaxNb: 3
