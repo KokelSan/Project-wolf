@@ -5,15 +5,15 @@ public static class ScriptableObjectFactory
 {
     private static readonly Dictionary<string, int> instancesSuffixes = new Dictionary<string, int>();
 
-    public static T CreateInstance<T>(T scriptableObject) where T : ScriptableObject, IInstantiableSO
+    public static T CreateInstance<T>(T scriptableObject) where T : InstantiableSO
     {
-        T instance = ScriptableObject.Instantiate<T>(scriptableObject);
+        T instance = Object.Instantiate(scriptableObject);
         instance.name = ComputeInstanceName(scriptableObject.name);
         instance.Initialize(scriptableObject);
         return instance;
     }
 
-    public static List<T> CreateInstances<T>(List<T> scriptableObjectList) where T : ScriptableObject, IInstantiableSO
+    public static List<T> CreateInstances<T>(List<T> scriptableObjectList) where T : InstantiableSO
     {
         List<T> instances = new List<T>();
         foreach (T scriptableObject in scriptableObjectList)
