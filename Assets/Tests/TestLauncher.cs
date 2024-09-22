@@ -3,57 +3,82 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 public class TestLauncher : MonoBehaviour
 {
-    public TestManager TestManager => GetComponent<TestManager>();
+    private TestManager testManager;
+    private bool gamePrepared = false;
 
-    [Button("Test Game Preparation")]
+    #region Game Preparation
+
+    [Button(nameof(gamePrepared), ConditionResult.EnableDisable, true, "Test Game Preparation")]
     public void PrepareGame()
     {
-        InstantiableSOFactory.CleanDictionnary();
+        if (testManager == null) testManager = GetComponent<TestManager>();
 
-        GameManager gameManager = gameObject.AddComponent<GameManager>();
-        gameManager.SetGameControl(TestManager.GameControlSO);
-        gameManager.SetPlayers(CreatePlayers());
-        gameManager.PrepareGame();
+        
+        testManager.GameManager = CreateGameManager();
+        testManager.GameManager.SetGameControl(testManager.GameControlSO);
+        testManager.GameManager.SetPlayers(CreatePlayers());
+        testManager.GameManager.PrepareGame();
+        
+        gamePrepared = true;
+    }
 
-        DestroyImmediate(gameManager);
+    private GameManager CreateGameManager()
+    {
+        GameObject go = new GameObject("GameManager");
+        go.transform.parent = transform;
+        return go.AddComponent<GameManager>();
     }
 
     private List<Player> CreatePlayers()
     {
-        TestManager.Players = new List<Player>();
-        for (int i = 1; i <= TestManager.PlayersNb; i++)
+        testManager.Players = new List<Player>();
+        for (int i = 1; i <= testManager.PlayersNb; i++)
         {
-            TestManager.Players.Add(new Player(new Guid(), $"Player {i}"));
+            testManager.Players.Add(new Player(new Guid(), $"Player {i}"));
         }
-        return TestManager.Players;
+        return testManager.Players;
     }
 
-    [Button("Debug Players")]
+    #endregion
+
+    #region Game Resolution
+
+    [Button(nameof(gamePrepared), ConditionResult.EnableDisable, false, "Test Game Resolution")]
+    public void ResolveGame()
+    {
+        testManager.GameManager.ResolveGame();
+    }
+
+    #endregion
+
+
+    #region Common
+
+    private bool allowPlayersDebug => gamePrepared && testManager.Players?.Any() == true;
+    [Button(nameof(allowPlayersDebug), ConditionResult.EnableDisable, false, "Debug Players")]
     public void DebugPlayers()
     {
-        if (TestManager.Players?.Any() != true) return;
+        if (testManager.Players?.Any() != true) return;
 
-        foreach (Player player in TestManager.Players)
+        foreach (Player player in testManager.Players)
         {
-
-
-            StringBuilder sb = new StringBuilder().AppendLine($"{player.Name.ToUpper()}");
-            sb.AppendLine($"{player.CharacterInstance.name} (parent = {player.CharacterInstance})");
-
-
-            Debug.Log($"{sb.ToString()}\n\n");
-
+            Debug.Log($"{JsonConvert.SerializeObject(player, Formatting.Indented)}\n\n");
         }
     }
 
-    [Button("Clear Players")]
-    public void ClearPlayers()
+    [Button(nameof(gamePrepared), ConditionResult.EnableDisable, false, "Reset")]
+    public void ResetTest()
     {
-        TestManager.Players?.Clear();
+        DestroyImmediate(testManager.GameManager.gameObject);
+        InstantiableSOFactory.CleanDictionnary();
+        testManager.Players?.Clear();
+        gamePrepared = false;
     }
+
+    #endregion
+
 }

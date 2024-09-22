@@ -37,18 +37,10 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-    private void CheckGameRequirements()
-    {
-        if (_gameControl == null) throw new Exception($"There is no game control");
-        if (ResolutionOrder?.Any() != true) throw new Exception($"The resolution order is null or empty");
-        if (DistributionStrategies?.Any() != true) throw new Exception($"The distribution strategies are null or empty");
-
-        if (_players?.Any() != true) throw new Exception($"The players list is null or empty");
-        if (DistributionStrategies.OrderBy(strat => strat.PlayersNb).First()?.PlayersNb > _players.Count) throw new Exception($"There are not enough players to play");
-    }
+    #region Game Preparation
 
     public void PrepareGame()
-    {    
+    {
         try
         {
             CheckGameRequirements();
@@ -58,15 +50,25 @@ public class GameManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"Game aborted : {e.Message} \n\n{e.ToString()}\n");
+            Debug.LogError($"Game preparation aborted : {e.Message} \n\n{e.ToString()}\n");
         }
+    }
+
+    private void CheckGameRequirements()
+    {
+        if (_gameControl == null) throw new Exception($"There is no game control");
+        if (ResolutionOrder?.Any() != true) throw new Exception($"The resolution order is null or empty");
+        if (DistributionStrategies?.Any() != true) throw new Exception($"The distribution strategies are null or empty");
+
+        if (_players?.Any() != true) throw new Exception($"The players list is null or empty");
+        if (DistributionStrategies.OrderBy(strat => strat.PlayersNb).First()?.PlayersNb > _players.Count) throw new Exception($"There are not enough players to play");
     }    
 
     private DistributionStrategy ComputeDistributionStrategy()
     {
         DistributionStrategy strategy = DistributionStrategies.OrderBy(strat => strat.PlayersNb).FirstOrDefault(strat => strat.IsValidForPlayersCount(_players.Count));
 
-        if (strategy == null) 
+        if (strategy == null)
         {
             throw new Exception($"No valid strategy found for {_players.Count} players");
         }
@@ -77,7 +79,7 @@ public class GameManager : MonoBehaviour
             strategy.CharacterDistributions.ForEach(distribution => log += $"  {distribution.Character.Name} : {distribution.MaxNb}\n");
             Debug.Log(log);
         }
-        
+
         return strategy;
     }
 
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
         string log = "--- Character assignation ---";
 
         List<CharacterSO> availableCharacters = CharacterFactory.InstantiateFromDistributionStrategy(strategy, _players.Count, out string unassignedLog);
-        foreach (Player player in _players) 
+        foreach (Player player in _players)
         {
             int randomIndex = UnityEngine.Random.Range(0, availableCharacters.Count);
             player.SetCharacterInstance(availableCharacters[randomIndex]);
@@ -105,4 +107,23 @@ public class GameManager : MonoBehaviour
             Debug.Log($"{log}\n");
         }
     }
+
+    #endregion
+
+    #region Game Resolution
+
+    public void ResolveGame()
+    {
+        try
+        {
+            
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Game resolution aborted : {e.Message} \n\n{e.ToString()}\n");
+        }
+    }
+
+    #endregion
+
 }

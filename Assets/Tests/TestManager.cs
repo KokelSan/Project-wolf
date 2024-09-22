@@ -8,4 +8,6 @@ public class TestManager : MonoBehaviour
     public int PlayersNb;
 
     [HideInInspector] public List<Player> Players;
+
+    [HideInInspector] public GameManager GameManager;
 }
