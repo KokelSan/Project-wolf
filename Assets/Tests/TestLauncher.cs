@@ -5,19 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(TestManager))]
 public class TestLauncher : MonoBehaviour
 {
-    private TestManager testManager;
+    private TestManager testManager => GetComponent<TestManager>();
+
     private bool gamePrepared = false;
 
     #region Game Preparation
 
     [Button(nameof(gamePrepared), ConditionResult.EnableDisable, true, "Test Game Preparation")]
     public void PrepareGame()
-    {
-        if (testManager == null) testManager = GetComponent<TestManager>();
-
-        
+    {        
         testManager.GameManager = CreateGameManager();
         testManager.GameManager.SetGameControl(testManager.GameControlSO);
         testManager.GameManager.SetPlayers(CreatePlayers());
@@ -38,7 +37,7 @@ public class TestLauncher : MonoBehaviour
         testManager.Players = new List<Player>();
         for (int i = 1; i <= testManager.PlayersNb; i++)
         {
-            testManager.Players.Add(new Player(new Guid(), $"Player {i}"));
+            testManager.Players.Add(new Player(Guid.NewGuid(), $"Player {i}"));
         }
         return testManager.Players;
     }
@@ -66,14 +65,14 @@ public class TestLauncher : MonoBehaviour
 
         foreach (Player player in testManager.Players)
         {
-            Debug.Log($"{JsonConvert.SerializeObject(player, Formatting.Indented)}\n\n");
+            Debug.Log($"{player.Name}\n{JsonConvert.SerializeObject(player, Formatting.Indented)}\n\n");
         }
     }
 
     [Button(nameof(gamePrepared), ConditionResult.EnableDisable, false, "Reset")]
     public void ResetTest()
     {
-        DestroyImmediate(testManager.GameManager.gameObject);
+        transform.GetComponentsInChildren<GameManager>().ToList().ForEach(gm => DestroyImmediate(gm.gameObject));
         InstantiableSOFactory.CleanDictionnary();
         testManager.Players?.Clear();
         gamePrepared = false;
