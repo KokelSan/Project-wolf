@@ -16,7 +16,7 @@ MonoBehaviour:
   Description: 
   IndividualSkills:
   - {fileID: 11400000, guid: 2422349c31a4d0941a7a8a198109205b, type: 2}
-  - {fileID: 11400000, guid: 2422349c31a4d0941a7a8a198109205b, type: 2}
+  - {fileID: 11400000, guid: 4aaddc884d3210142b811dcf77537259, type: 2}
+  - {fileID: 11400000, guid: 660046cff4d7ab849875faa44d4ca983, type: 2}
   GroupSkills:
   - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
-  individualSkills_Instantiated: []

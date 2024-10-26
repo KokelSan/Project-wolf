@@ -9,7 +9,7 @@ public static class InstantiableSOFactory
     {
         T instance = Object.Instantiate(scriptableObject);
         instance.name = ComputeInstanceName(scriptableObject.name);
-        instance.Initialize(scriptableObject);
+        instance.InitializeFromParent(scriptableObject);
         return instance;
     }
 

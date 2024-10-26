@@ -22,12 +22,18 @@ MonoBehaviour:
   - PlayersNb: 5
     CharacterDistributions:
     - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
-      MaxNb: 3
+      MaxNb: 2
     - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
       MaxNb: 2
+    - Character: {fileID: 11400000, guid: 1318d923de553ce46964311585ad5346, type: 2}
+      MaxNb: 1
   - PlayersNb: 8
     CharacterDistributions:
     - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
-      MaxNb: 5
+      MaxNb: 3
     - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
       MaxNb: 3
+    - Character: {fileID: 11400000, guid: 4889aa01a0926234eaff02862694f5d7, type: 2}
+      MaxNb: 1
+    - Character: {fileID: 11400000, guid: 1318d923de553ce46964311585ad5346, type: 2}
+      MaxNb: 1

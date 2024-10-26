@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5849697613914888966}
   - component: {fileID: 6718421973552507557}
   m_Layer: 0
-  m_Name: Hugging Face API Manager
+  m_Name: HuggingFaceAPIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

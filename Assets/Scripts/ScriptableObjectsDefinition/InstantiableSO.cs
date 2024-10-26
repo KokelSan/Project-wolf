@@ -6,7 +6,7 @@ public abstract class InstantiableSO : ScriptableObject, IInstantiableSO
 
     public int InstanceId => GetInstanceID();
 
-    public void Initialize(IInstantiableSO parentSO)
+    public void InitializeFromParent(IInstantiableSO parentSO)
     {
         ParentSO = parentSO;
         Initialize();

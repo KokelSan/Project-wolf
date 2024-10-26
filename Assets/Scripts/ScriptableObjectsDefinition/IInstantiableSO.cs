@@ -8,5 +8,5 @@ public interface IInstantiableSO
     /// </summary>
     int InstanceId { get; }
 
-    void Initialize(IInstantiableSO parentSO);
+    void InitializeFromParent(IInstantiableSO parentSO);
 }

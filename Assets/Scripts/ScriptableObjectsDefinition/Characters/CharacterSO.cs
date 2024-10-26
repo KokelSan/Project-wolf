@@ -13,13 +13,26 @@ public class CharacterSO : InstantiableSO
 
     public bool IsAlive { get; private set; }
 
+    private CharacterSO parent;
+
     protected override void Initialize()
     {
-        if (!TryGetParentAs(out CharacterSO parent))
-            throw new Exception($"Impossible to cast ParentSO to CharacterSO for instance {name} ({InstanceId})");
+        if (!TryGetParentAs(out parent))
+            throw new Exception($"Impossible to cast ParentSO to CharacterSO for instance {name} ({InstanceId})");     
 
         IndividualSkills = InstantiableSOFactory.CreateInstances(parent.IndividualSkills);
-        GroupSkills = InstantiableSOFactory.CreateInstances(parent.GroupSkills);
+        GroupSkills.Clear();
+    }
+
+    public List<ASkillSO> GetParentGroupSkills()
+    {
+        return parent?.GroupSkills ?? new List<ASkillSO>();
+    }
+
+    public void AddGroupSkill(ASkillSO skill)
+    {
+        if (GroupSkills == null) GroupSkills = new List<ASkillSO>();
+        GroupSkills.Add(skill);
     }
 
     public void Kill()
