@@ -20,11 +20,11 @@ public class CharacterSO : InstantiableSO
         if (!TryGetParentAs(out parent))
             throw new Exception($"Impossible to cast ParentSO to CharacterSO for instance {name} ({InstanceId})");     
 
-        IndividualSkills = InstantiableSOFactory.CreateInstances(parent.IndividualSkills);
+        IndividualSkills = InstantiableSOFactory.CreateInstances(parent.IndividualSkills, this);
         GroupSkills.Clear();
     }
 
-    public List<ASkillSO> GetParentGroupSkills()
+    public List<ASkillSO> GetGroupSkillsToInstanttiate()
     {
         return parent?.GroupSkills ?? new List<ASkillSO>();
     }

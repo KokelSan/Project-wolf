@@ -1,12 +1,10 @@
 using EditorAttributes;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 [RequireComponent(typeof(TestManager))]
 public class TestLauncher : MonoBehaviour
@@ -55,6 +53,7 @@ public class TestLauncher : MonoBehaviour
     public void ResolveGame()
     {
         testManager.GameManager.ResolveGame();
+        DebugGameResolution();
     }
 
     #endregion
@@ -76,12 +75,12 @@ public class TestLauncher : MonoBehaviour
         foreach (Player player in players)
         {
             CharacterSO character = player.CharacterInstance;
-            sb.AppendLine().AppendLine($"{player.Name} is {character.name} (Id = {character.InstanceId}, parent = {character.ParentSO.InstanceId})");
+            sb.AppendLine().AppendLine($"{player.Name} is {character.name} (Id = {character.InstanceId}, parent = {character.OriginalSO.InstanceId})");
 
             foreach (ASkillSO skill in character.IndividualSkills)
             {
-                sb.Append($"    {skill.name} (Id = {skill.InstanceId}, parent = {skill.ParentSO.InstanceId})");
-                sb.AppendLine($" @ {skill.Frequency.name} (Id = {skill.Frequency.InstanceId}, parent = {skill.Frequency.ParentSO.InstanceId})");
+                sb.Append($"    {skill.name} (Id = {skill.InstanceId}, parent = {skill.OriginalSO.InstanceId})");
+                sb.AppendLine($" @ {skill.Frequency.name} (Id = {skill.Frequency.InstanceId}, parent = {skill.Frequency.OriginalSO.InstanceId})");
             }
 
             foreach (ASkillSO skill in character.GroupSkills)
@@ -102,6 +101,15 @@ public class TestLauncher : MonoBehaviour
             }
         }
 
+        Debug.Log(sb.AppendLine().ToString());
+    }
+
+    private void DebugGameResolution()
+    {
+        StringBuilder sb = new StringBuilder().AppendLine($"--- Game resolution ---").AppendLine();
+
+
+       
         Debug.Log(sb.AppendLine().ToString());
     }
 

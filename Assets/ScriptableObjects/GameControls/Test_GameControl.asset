@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ResolutionOrder:
   - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
+  - {fileID: 11400000, guid: 660046cff4d7ab849875faa44d4ca983, type: 2}
+  - {fileID: 11400000, guid: 660046cff4d7ab849875faa44d4ca983, type: 2}
   DistributionStrategies:
   - PlayersNb: 1
     CharacterDistributions:

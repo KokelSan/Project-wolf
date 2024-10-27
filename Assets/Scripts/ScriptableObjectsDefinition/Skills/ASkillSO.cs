@@ -55,7 +55,7 @@ public abstract class ASkillSO : InstantiableSO
         if (!TryGetParentAs(out ASkillSO parent))
             throw new Exception($"Impossible to cast ParentSO to ASkillSO for instance {name} ({InstanceId})");
 
-        Frequency = InstantiableSOFactory.CreateInstance(parent.Frequency);
+        Frequency = InstantiableSOFactory.CreateInstance(parent.Frequency, this);
     }
 
     protected abstract void Execute(CharacterSO target);

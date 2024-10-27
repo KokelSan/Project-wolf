@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public static class CharacterFactory 
@@ -38,19 +37,28 @@ public static class CharacterFactory
 
     private static void CreateGroupSkills(List<CharacterSO> characters)
     {
-        Dictionary<ASkillSO, ASkillSO> instantiatedSkill = new Dictionary<ASkillSO, ASkillSO>();
+        Dictionary<ASkillSO, List<CharacterSO>> groupSkillsToInstantiate = new Dictionary<ASkillSO, List<CharacterSO>>();
 
         foreach (CharacterSO character in characters) 
         {
-            foreach (ASkillSO skill in character.GetParentGroupSkills())
+            foreach (ASkillSO skill in character.GetGroupSkillsToInstanttiate())
             {
-                if (!instantiatedSkill.ContainsKey(skill))
+                if (!groupSkillsToInstantiate.ContainsKey(skill))
                 {
-                    instantiatedSkill.Add(skill, InstantiableSOFactory.CreateInstance(skill));
+                    groupSkillsToInstantiate.Add(skill, new List<CharacterSO>());
                 }
 
-                character.AddGroupSkill(instantiatedSkill[skill]);
+                groupSkillsToInstantiate[skill].Add(character);                
             }
-        }        
+        }
+
+        foreach (KeyValuePair<ASkillSO, List<CharacterSO>> kvp in groupSkillsToInstantiate)
+        {
+            ASkillSO skill = InstantiableSOFactory.CreateInstance(kvp.Key, kvp.Value);
+            foreach (CharacterSO character in kvp.Value)
+            {
+                character.AddGroupSkill(skill);
+            }
+        }
     }
 }

@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Kill_1_Once
   m_EditorClassIdentifier: 
   ActionVerb: kill
-  Description: Allow the character to kill one target per round
+  Description: Allow the character to kill one target once
   TargetNb: 1
   Frequency: {fileID: 11400000, guid: 5c99fe76a23e13b45b0955f84cf10e96, type: 2}
   Options: 1
-  CanSelfTarget: 1
-  TargetSpecificCharacters: 0
   AuthorizedTargets:
     Characters: []
+  CanSelfTarget: 1
+  TargetSpecificCharacters: 0

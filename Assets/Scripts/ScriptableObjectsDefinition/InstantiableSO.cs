@@ -1,22 +1,31 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class InstantiableSO : ScriptableObject, IInstantiableSO
 {
-    public IInstantiableSO ParentSO { get; private set; } = null;
+    #region Interface implementation
 
     public int InstanceId => GetInstanceID();
 
-    public void InitializeFromParent(IInstantiableSO parentSO)
+    public IInstantiableSO OriginalSO { get; private set; } = null;
+    public List<IInstantiableSO> OwnersSO { get; private set; } = null;
+    public IInstantiableSO OwnerSO => OwnersSO.FirstOrDefault();
+
+    public void InitializeInstance(IInstantiableSO originalSO, List<IInstantiableSO> ownerSO)
     {
-        ParentSO = parentSO;
+        OriginalSO = originalSO;
+        OwnersSO = ownerSO;
         Initialize();
-    }
+    } 
+
+    #endregion
 
     protected abstract void Initialize();
 
     protected bool TryGetParentAs<T>(out T parent) where T : InstantiableSO
     {
-        parent = ParentSO as T;
+        parent = OriginalSO as T;
         return parent != null;
     }
 }
