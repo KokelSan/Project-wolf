@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class CharacterFactory 
 {  
-    public static List<CharacterSO> InstantiateFromDistributionStrategy(DistributionStrategy strategy, int playersCount)
+    public static List<CharacterSO> InstantiateFromDistributionStrategy(DistributionStrategy strategy, int playersCount, out List<ASkillSO> groupSkills)
     {        
         // All characters available from the distribution, possibly with more elements than the players count
         List<CharacterSO> availableCharacters = new(strategy.AllCharacters);
@@ -30,12 +30,12 @@ public static class CharacterFactory
             availableCharacters.RemoveAt(index);
         }
 
-        CreateGroupSkills(characters);
+        groupSkills = CreateGroupSkills(characters);
 
         return characters;
     }
 
-    private static void CreateGroupSkills(List<CharacterSO> characters)
+    private static List<ASkillSO> CreateGroupSkills(List<CharacterSO> characters)
     {
         Dictionary<ASkillSO, List<CharacterSO>> groupSkillsToInstantiate = new Dictionary<ASkillSO, List<CharacterSO>>();
 
@@ -52,13 +52,18 @@ public static class CharacterFactory
             }
         }
 
+        List<ASkillSO> instantiatedGroupSkills = new List<ASkillSO>();
         foreach (KeyValuePair<ASkillSO, List<CharacterSO>> kvp in groupSkillsToInstantiate)
         {
             ASkillSO skill = InstantiableSOFactory.CreateInstance(kvp.Key, kvp.Value);
+            instantiatedGroupSkills.Add(skill);
+
             foreach (CharacterSO character in kvp.Value)
             {
                 character.AddGroupSkill(skill);
             }
         }
+
+        return instantiatedGroupSkills;
     }
 }

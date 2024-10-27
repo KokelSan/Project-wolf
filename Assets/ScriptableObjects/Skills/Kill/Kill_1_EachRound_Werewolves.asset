@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7441292e3a5c7904bb2f2f0ddb422917, type: 3}
-  m_Name: Kill_1_EachRound
+  m_Name: Kill_1_EachRound_Werewolves
   m_EditorClassIdentifier: 
   ActionVerb: kill
-  Description: Allow the character to kill one target per round
+  Description: 
   TargetNb: 1
   Frequency: {fileID: 11400000, guid: 71f8e2b0d8a3f80439a227f31b491a2d, type: 2}
   Options: 1
-  CanSelfTarget: 1
-  TargetSpecificCharacters: 0
   AuthorizedTargets:
     Characters: []
+  CanSelfTarget: 1
+  TargetSpecificCharacters: 0

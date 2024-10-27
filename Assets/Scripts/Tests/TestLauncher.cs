@@ -17,15 +17,19 @@ public class TestLauncher : MonoBehaviour
 
     [Button(nameof(gamePrepared), ConditionResult.EnableDisable, true, "Test Game Preparation")]
     public void PrepareGame()
-    {        
-        testManager.GameManager = CreateGameManager();
-        testManager.GameManager.SetGameControl(testManager.GameControlSO);
-        testManager.GameManager.SetPlayers(CreatePlayers());
+    {
+        try
+        {
+            testManager.GameManager = CreateGameManager();
+            testManager.GameManager.SetGameControl(testManager.GameControlSO);
+            testManager.GameManager.SetPlayers(CreatePlayers());
 
-        testManager.GameManager.PrepareGame();
-        DebugGamePreparation();
-        
-        gamePrepared = true;
+            testManager.GameManager.PrepareGame();
+            DebugGamePreparation();
+
+            gamePrepared = true;
+        }
+        catch {}
     }
 
     private GameManager CreateGameManager()
@@ -64,7 +68,7 @@ public class TestLauncher : MonoBehaviour
     {
         List<Player> players = testManager.GameManager.Players;
 
-        StringBuilder sb = new StringBuilder().AppendLine($"--- Strategy found for {players.Count} players ---").AppendLine();
+        StringBuilder sb = new StringBuilder().AppendLine($"--- Strategy found for {players.Count} players ---");
         testManager.GameManager.CurrentStrategy.CharacterDistributions.ForEach(distribution => sb.AppendLine($"    {distribution.Character.Name} : {distribution.MaxNb}"));
         Debug.Log(sb.AppendLine().ToString());
 
@@ -75,33 +79,32 @@ public class TestLauncher : MonoBehaviour
         foreach (Player player in players)
         {
             CharacterSO character = player.CharacterInstance;
-            sb.AppendLine().AppendLine($"{player.Name} is {character.name} (Id = {character.InstanceId}, parent = {character.OriginalSO.InstanceId})");
+            sb.AppendLine($"    {player.Name} is a {character.Name} ({character.name}: Id = {character.InstanceId}, parent = {character.OriginalSO.InstanceId})");
 
             foreach (ASkillSO skill in character.IndividualSkills)
             {
-                sb.Append($"    {skill.name} (Id = {skill.InstanceId}, parent = {skill.OriginalSO.InstanceId})");
+                sb.Append($"         {skill.name} (Id = {skill.InstanceId}, parent = {skill.OriginalSO.InstanceId})");
                 sb.AppendLine($" @ {skill.Frequency.name} (Id = {skill.Frequency.InstanceId}, parent = {skill.Frequency.OriginalSO.InstanceId})");
             }
 
             foreach (ASkillSO skill in character.GroupSkills)
             {
-                if (!groupSkillsDict.ContainsKey(skill))
-                    groupSkillsDict.Add(skill, new List<CharacterSO>());
-
-                groupSkillsDict[skill].Add(character);
+                sb.Append($"         {skill.name} (Id = {skill.InstanceId}, parent = {skill.OriginalSO.InstanceId})");
+                sb.AppendLine($" @ {skill.Frequency.name} (Id = {skill.Frequency.InstanceId}, parent = {skill.Frequency.OriginalSO.InstanceId})");
             }
-        }
 
-        if (groupSkillsDict.Any())
-        {
-            sb.AppendLine($"\nGroup Skills:");
-            foreach (KeyValuePair<ASkillSO, List<CharacterSO>> kvp in groupSkillsDict)
-            {
-                sb.AppendLine($"{kvp.Key.name} : {kvp.Value.Select(character => character.name).ToCommaSeparatedString()}");
-            }
+            sb.AppendLine();
         }
 
         Debug.Log(sb.AppendLine().ToString());
+
+        sb.Clear();
+        sb.AppendLine($"--- Resolution order ---");
+        testManager.GameManager.OrderedPlayers.ForEach(player => sb.AppendLine($"    {player.Name} ({player.CharacterInstance.Name})"));
+        sb.AppendLine();
+        testManager.GameManager.InstantiatedGroupSkills.ForEach(skill => sb.AppendLine($"    {skill.name}"));
+        Debug.Log(sb.AppendLine().ToString());
+                
     }
 
     private void DebugGameResolution()

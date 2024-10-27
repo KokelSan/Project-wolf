@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327b5b9ae90fc44b88fab71bc4d9f0d, type: 3}
-  m_Name: MultiSkill_Archetype
+  m_Name: Hunter_Archetype
   m_EditorClassIdentifier: 
-  Name: Multi Skill Test Character
-  Description: 
+  Name: Hunter
+  Description: The hunter is a strong citizen who can bring one to death with him
   IndividualSkills:
-  - {fileID: 11400000, guid: 2422349c31a4d0941a7a8a198109205b, type: 2}
-  - {fileID: 11400000, guid: 4aaddc884d3210142b811dcf77537259, type: 2}
   - {fileID: 11400000, guid: 660046cff4d7ab849875faa44d4ca983, type: 2}
   GroupSkills:
-  - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
+  - {fileID: 11400000, guid: 26c974d2ea0c3bd43a1b278fe0a5ccdb, type: 2}

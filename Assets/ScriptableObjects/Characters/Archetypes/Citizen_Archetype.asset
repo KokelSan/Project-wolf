@@ -16,4 +16,5 @@ MonoBehaviour:
   Description: 'Citizens are very useful for the community : they are kind and do
     nothing at night except sleeping'
   IndividualSkills: []
-  GroupSkills: []
+  GroupSkills:
+  - {fileID: 11400000, guid: 26c974d2ea0c3bd43a1b278fe0a5ccdb, type: 2}

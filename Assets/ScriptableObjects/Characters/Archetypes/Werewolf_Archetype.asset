@@ -18,3 +18,4 @@ MonoBehaviour:
   IndividualSkills: []
   GroupSkills:
   - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
+  - {fileID: 11400000, guid: 26c974d2ea0c3bd43a1b278fe0a5ccdb, type: 2}

@@ -12,13 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7355d06c656b0e46a0d426e226816f3, type: 3}
   m_Name: Default_GameControl
   m_EditorClassIdentifier: 
-  ResolutionOrder: []
-  AttributionStrategies:
-  - PlayersNb: 3
+  ResolutionOrder:
+    Characters:
+    - {fileID: 11400000, guid: 1318d923de553ce46964311585ad5346, type: 2}
+    - {fileID: 11400000, guid: 4889aa01a0926234eaff02862694f5d7, type: 2}
+    GroupSkills:
+    - {fileID: 11400000, guid: 3acded45351a85147824096f25d68160, type: 2}
+    - {fileID: 11400000, guid: 26c974d2ea0c3bd43a1b278fe0a5ccdb, type: 2}
+  DistributionStrategies:
+  - PlayersNb: 5
     CharacterDistributions:
     - Character: {fileID: 11400000, guid: 6ae5ba599ea86834790218d253f0eaf4, type: 2}
       MaxNb: 1
-    - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
-      MaxNb: 1
     - Character: {fileID: 11400000, guid: 1318d923de553ce46964311585ad5346, type: 2}
       MaxNb: 1
+    - Character: {fileID: 11400000, guid: 4889aa01a0926234eaff02862694f5d7, type: 2}
+      MaxNb: 1
+    - Character: {fileID: 11400000, guid: f298255812c2b3c46ab0ae760182afbe, type: 2}
+      MaxNb: 2
