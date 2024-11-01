@@ -57,7 +57,7 @@ public class TestLauncher : MonoBehaviour
     public void ResolveGame()
     {
         testManager.GameManager.ResolveGame();
-        DebugGameResolution();
+        //DebugGameResolution();
     }
 
     #endregion
@@ -96,7 +96,7 @@ public class TestLauncher : MonoBehaviour
             sb.AppendLine();
         }
 
-        Debug.Log(sb.AppendLine().ToString());
+        Debug.Log(sb.ToString());
 
         sb.Clear();
         sb.AppendLine($"--- Resolution order ---");
