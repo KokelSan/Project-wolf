@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameControlSO : ScriptableObject
 {
     public ResolutionOrder ResolutionOrder;
-    public List<DistributionStrategy> DistributionStrategies;
+    public DistributionStrategies DistributionStrategies;
+    public WinningGroups WinningGroups;
 }
 
 [Serializable]
@@ -14,4 +15,22 @@ public class ResolutionOrder
 {
     public List<CharacterSO> Characters;
     public List<ASkillSO> GroupSkills;
+}
+
+[Serializable]
+public class DistributionStrategies
+{
+    public List<DistributionStrategy> Strategies;
+}
+
+[Serializable]
+public class WinningGroups
+{
+    public List<CharacterGroup> Groups;
+}
+
+[Serializable]
+public class CharacterGroup
+{
+    public List<CharacterSO> Members;
 }
