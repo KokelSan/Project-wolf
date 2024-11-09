@@ -1,4 +1,3 @@
-using UnityEngine;
 
 public abstract class ATimerState : AState
 {
@@ -22,34 +21,13 @@ public abstract class ATimerState : AState
 
         timer += deltaTime;
 
-        //Debug.Log($"{StateName.ToString()} : {(int)timer}");
-
         if (timer >= duration)
         {
             Exit(nextState);
-        }        
-    }
-}
+        }
 
-public class GameRevealTimerState : ATimerState
-{
-    public GameRevealTimerState(EStateName stateName, IStateMachine stateMachine, float duration) : base(stateName, stateMachine, duration)
-    {
-        nextState = EStateName.IndividualSkills;
+        OnTimerUpdated(deltaTime);
     }
-}
 
-public class IndividualSkillsTimerState : ATimerState
-{
-    public IndividualSkillsTimerState(EStateName stateName, IStateMachine stateMachine, float duration) : base(stateName, stateMachine, duration)
-    {
-        nextState = EStateName.GroupSkills;
-    }
-}
-
-public class GroupSkillsTimerState : ATimerState
-{
-    public GroupSkillsTimerState(EStateName stateName, IStateMachine stateMachine, float duration) : base(stateName, stateMachine, duration)
-    {
-    }
+    public abstract void OnTimerUpdated(float deltaTime);
 }

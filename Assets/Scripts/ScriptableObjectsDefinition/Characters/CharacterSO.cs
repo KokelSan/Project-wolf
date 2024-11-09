@@ -11,7 +11,7 @@ public class CharacterSO : InstantiableSO
     [Space] public List<ASkillSO> IndividualSkills;
     [Space] public List<ASkillSO> GroupSkills;
 
-    public bool IsAlive { get; private set; }
+    public bool IsAlive { get; private set; } = true;
 
     private CharacterSO parent;
 

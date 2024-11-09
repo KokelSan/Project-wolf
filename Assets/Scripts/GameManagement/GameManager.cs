@@ -5,18 +5,33 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     public GameControlSO GameControl { get; private set; }
     public List<Player> Players { get; private set; }
 
     // Game preparation
     public DistributionStrategy CurrentStrategy { get; private set; }
-    public List<Player> OrderedPlayers { get; private set; }
+    public List<Player> PlayersWithIndividualSkills { get; private set; }
+    public List<Player> AlivePlayers => Players.Where(player => player.CharacterInstance.IsAlive).ToList();
     public List<ASkillSO> InstantiatedGroupSkills { get; private set; }
 
     //Game resolution
-    public GameResolutionStateMachine StateMachine { get; private set; }
+    public GameStateMachine StateMachine { get; private set; }
 
     #region Members Management
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     public void SetGameControl(GameControlSO gameControl)
     {
@@ -62,15 +77,15 @@ public class GameManager : MonoBehaviour
     {
         if (GameControl == null) throw new Exception($"There is no game control");
         if (GameControl.ResolutionOrder?.Characters?.Any() != true && GameControl.ResolutionOrder?.GroupSkills?.Any() != true) throw new Exception($"The resolution order is null or empty");
-        if (GameControl.DistributionStrategies?.Any() != true) throw new Exception($"The distribution strategies are null or empty");
+        if (GameControl.DistributionStrategies?.Strategies?.Any() != true) throw new Exception($"The distribution strategies are null or empty");
 
         if (Players?.Any() != true) throw new Exception($"The players list is null or empty");
-        if (GameControl.DistributionStrategies.OrderBy(strat => strat.PlayersNb).First()?.PlayersNb > Players.Count) throw new Exception($"There are not enough players to play");
+        if (GameControl.DistributionStrategies.Strategies?.OrderBy(strat => strat.PlayersNb).First()?.PlayersNb > Players.Count) throw new Exception($"There are not enough players to play");
     }    
 
     private DistributionStrategy ComputeDistributionStrategy()
     {
-        CurrentStrategy = GameControl.DistributionStrategies.OrderBy(strat => strat.PlayersNb).FirstOrDefault(strat => strat.IsValidForPlayersCount(Players.Count));
+        CurrentStrategy = GameControl.DistributionStrategies.Strategies?.OrderBy(strat => strat.PlayersNb).FirstOrDefault(strat => strat.IsValidForPlayersCount(Players.Count));
 
         if (CurrentStrategy == null)
         {
@@ -92,15 +107,15 @@ public class GameManager : MonoBehaviour
             availableCharacters.RemoveAt(randomIndex);
         }
 
-        GenerateOrderedPlayersList();
+        GeneratePlayersWithIndividualSkillsList();
     }
 
-    private void GenerateOrderedPlayersList()
+    private void GeneratePlayersWithIndividualSkillsList()
     {
-        OrderedPlayers = new List<Player>();
+        PlayersWithIndividualSkills = new List<Player>();
         foreach (CharacterSO character in GameControl.ResolutionOrder.Characters)
         {
-            OrderedPlayers.AddRange(Players.Where(player => player.CharacterInstance.Name.Equals(character.Name)).ToList());
+            PlayersWithIndividualSkills.AddRange(Players.Where(player => player.CharacterInstance.Name.Equals(character.Name)).ToList());
         }
     }
 
@@ -108,22 +123,12 @@ public class GameManager : MonoBehaviour
 
     #region Game Resolution
 
-    public void ResolveGame()
+    public void StartGame()
     {
         try
         {
-            StateMachine = new GameResolutionStateMachine(this);
-            StateMachine.StartMachine(OnGameResolutionStateMachineCompleted);
-
-            foreach (Player player in OrderedPlayers) 
-            {
-                
-            }
-
-            foreach (ASkillSO skill in InstantiatedGroupSkills)
-            {
-
-            }
+            StateMachine = new GameStateMachine();
+            StateMachine.StartMachine(OnGameCompleted);
         }
         catch (Exception e)
         {
@@ -137,7 +142,7 @@ public class GameManager : MonoBehaviour
         StateMachine?.UpdateMachine(Time.deltaTime);
     }
 
-    public void OnGameResolutionStateMachineCompleted()
+    public void OnGameCompleted()
     {
         Debug.Log($"Game resolution state machine completed !");
     }

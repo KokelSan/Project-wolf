@@ -56,7 +56,7 @@ public class TestLauncher : MonoBehaviour
     [Button(nameof(gamePrepared), ConditionResult.EnableDisable, false, "Test Game Resolution")]
     public void ResolveGame()
     {
-        testManager.GameManager.ResolveGame();
+        testManager.GameManager.StartGame();
         //DebugGameResolution();
     }
 
@@ -100,7 +100,7 @@ public class TestLauncher : MonoBehaviour
 
         sb.Clear();
         sb.AppendLine($"--- Resolution order ---");
-        testManager.GameManager.OrderedPlayers.ForEach(player => sb.AppendLine($"    {player.Name} ({player.CharacterInstance.Name})"));
+        testManager.GameManager.PlayersWithIndividualSkills.ForEach(player => sb.AppendLine($"    {player.Name} ({player.CharacterInstance.Name})"));
         sb.AppendLine();
         testManager.GameManager.InstantiatedGroupSkills.ForEach(skill => sb.AppendLine($"    {skill.name}"));
         Debug.Log(sb.AppendLine().ToString());
@@ -125,5 +125,10 @@ public class TestLauncher : MonoBehaviour
         InstantiableSOFactory.CleanDictionnary();
         testManager.Players?.Clear();
         gamePrepared = false;
-    } 
+    }
+
+    private void OnApplicationQuit()
+    {
+        if(gamePrepared) ResetTest();
+    }
 }

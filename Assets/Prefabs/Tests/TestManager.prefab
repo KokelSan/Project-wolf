@@ -58,5 +58,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameControlSO: {fileID: 11400000, guid: 918b13445a945334abc6f09f5db24b02, type: 2}
-  PlayersNb: 3
+  PlayersNb: 5
   GameManager: {fileID: 0}

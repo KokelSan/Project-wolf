@@ -26,11 +26,11 @@ public class DistributionStrategies
 [Serializable]
 public class WinningGroups
 {
-    public List<CharacterGroup> Groups;
+    public List<CharactersList> Groups;
 }
 
 [Serializable]
-public class CharacterGroup
+public class CharactersList
 {
     public List<CharacterSO> Members;
 }

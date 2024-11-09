@@ -1,11 +1,19 @@
 public enum EStateName
 {
-    None = -1,
+    None = 0,
 
-    // Game preparation
-    GameReveal,
+    // GameStateMachine
+    GameBeginning,
+    RoundsLoop,
+    GameEnding,
 
-    // Game resolution
-    IndividualSkills,
-    GroupSkills,
+    // RoundStateMachine
+    RoundBeginning,
+    SkillsLoop,
+    RoundEnding,
+
+    // SkillsLoop
+    IndividualSkill,
+    GroupSkill,
+
 }

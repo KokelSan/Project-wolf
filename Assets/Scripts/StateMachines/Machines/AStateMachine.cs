@@ -3,67 +3,87 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AStateMachine : IStateMachine
-{   
+{
     #region Interface implementations
 
-    public Dictionary<EStateName, IState> States { get; protected set; } = new Dictionary<EStateName, IState>();
+    public Dictionary<EStateName, IState> States { get; protected set; } = new Dictionary<EStateName, IState>() { { EStateName.None, null } };
     public EStateName CurrentStateKey { get; protected set; } = EStateName.None;
     public IState CurrentState => States[CurrentStateKey];
     public Action OnMachineCompleted { get; protected set; }
 
-
     public abstract void InitializeMachine();
 
-    public virtual void StartMachine(Action onMachineCompleted)
+    public void StartMachine(Action onMachineCompleted)
     {
-        OnMachineCompleted = onMachineCompleted;
+        Debug.Log($"Starting machine '{GetType()}'");
+
+        OnStart();
+        OnMachineCompleted = onMachineCompleted;        
     }
 
+    public abstract void OnStart();
+
     public void UpdateMachine(float deltaTime)
-    {
+    {        
+        OnUpdate(deltaTime);
         CurrentState?.Update(deltaTime);
     }
 
+    public abstract void OnUpdate(float deltaTime);
+
     public void ExitMachine()
     {
+        Debug.Log($"Exiting machine '{GetType()}'");
+
+        OnExit();
         OnMachineCompleted?.Invoke();
     }
 
-    public void AddState<T>(T state) where T : IState
-    {
-        if (States.ContainsKey(state.StateName))
-        {
-            Debug.LogWarning($"State '{state.StateName.ToString()}' has already been registered as a state of the machine");
-            return;
-        }
+    public abstract void OnExit();
 
-        States.Add(state.StateName, state);
+    public void SetState<T>(T state) where T : IState
+    {
+        States[state.StateName] = state;
     }
 
     public void EnterState(EStateName stateName)
     {
-        if (States.ContainsKey(stateName))
-        {
-            CurrentStateKey = stateName;
-            CurrentState.Enter();
-            Debug.Log($"State '{stateName.ToString()}' entered");
+        if (!States.ContainsKey(stateName))
+        {            
+            Debug.LogWarning($"State '{stateName.ToString()}' is not registered as a state of the machine");
             return;
         }
 
-        Debug.LogWarning($"State '{stateName.ToString()}' is not registered as a state of the machine");
+        CurrentStateKey = stateName;
+        CurrentState.Enter();
     }
 
-    public void ExitState(EStateName stateToExit, EStateName nextState = EStateName.None)
+    public void ExitState(EStateName stateToExit, EStateName nextState)
     {
-        Debug.Log($"State '{stateToExit.ToString()}' exited");
+        if (!States.ContainsKey(stateToExit))
+        {
+            Debug.LogWarning($"Trying to exit unregistered state '{stateToExit.ToString()}'");
+            return;
+        }        
 
         if (nextState.Equals(EStateName.None))
         {
             ExitMachine();
-            return;
-        }            
+        } 
+        else
+        {
+            if (nextState.Equals(stateToExit))
+            {
+                ResetCurrentState();
+            }
 
-        EnterState(nextState);
+            EnterState(nextState);
+        }        
+    }
+
+    public virtual void ResetCurrentState()
+    {
+        CurrentState.Reset();
     }
 
     #endregion
@@ -71,5 +91,5 @@ public abstract class AStateMachine : IStateMachine
     public AStateMachine()
     {
         InitializeMachine();
-    }   
+    }
 }

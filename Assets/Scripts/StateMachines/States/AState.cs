@@ -1,3 +1,4 @@
+using UnityEngine;
 
 public abstract class AState : IState
 {
@@ -9,22 +10,37 @@ public abstract class AState : IState
 
     public bool IsCurrentState { get; protected set; }
 
-    public void Enter()
+    public virtual void Enter()
     {
+        Debug.Log($"Entering state '{GetType()}'");
+
         OnEnter();
         IsCurrentState = true;
     }
 
-    public void Exit(EStateName nextState = EStateName.None)
+    public abstract void OnEnter();
+
+    public virtual void Update(float deltaTime)
     {
-        OnExit();
-        IsCurrentState = false;
-        StateMachine.ExitState(StateName, nextState);
+        if (!IsCurrentState) return;
+
+        OnUpdate(deltaTime);
     }
 
-    public virtual void OnEnter() { }
-    public virtual void Update(float deltaTime) { }
-    public virtual void OnExit() { }
+    public abstract void OnUpdate(float deltaTime);
+
+    public abstract void Reset();
+
+    public virtual void Exit(EStateName nextState)
+    {
+        Debug.Log($"Exiting state '{GetType()}'");
+
+        OnExit();
+        IsCurrentState = false;
+        StateMachine.ExitState(StateName, nextState);        
+    }
+
+    public abstract void OnExit();
 
     #endregion
 
