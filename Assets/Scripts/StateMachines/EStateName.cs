@@ -7,7 +7,7 @@ public enum EStateName
     Rounds_SM,
     GameEnding,
 
-    // Rounds_SM's states
+    // RoundsStateMachine's states
     RoundBeginning,
     IndividualSkills_SM,
     GroupSkills_SM,
@@ -15,6 +15,5 @@ public enum EStateName
     RoundEnding,
 
     // Skills_SM's states
-    IndividualSkill,
-    GroupSkill,
+    Skill,
 }

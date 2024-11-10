@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    // Game preparation
     public GameControlSO GameControl { get; private set; }
     public List<Player> Players { get; private set; }
 
-    // Game preparation
+    // Game resolution
     public DistributionStrategy CurrentStrategy { get; private set; }
-    public List<Player> PlayersWithIndividualSkills { get; private set; }
-    public List<Player> AlivePlayers => Players.Where(player => player.CharacterInstance.IsAlive).ToList();
-    public List<ASkillSO> InstantiatedGroupSkills { get; private set; }
-
-    //Game resolution
+    public List<Player> AlivePlayers { get; private set; }
+    public List<Player> OrderedPlayersWithIndividualSkills { get; private set; }
+    public List<ASkillSO> OrderedGroupSkills { get; private set; }
     public GameStateMachine StateMachine { get; private set; }
 
     #region Members Management
@@ -53,6 +53,25 @@ public class GameManager : MonoBehaviour
         Players.Remove(player);
     }
 
+    public void KillPlayer(Player player)
+    {
+        player.CharacterInstance.Kill();
+
+        AlivePlayers.Remove(player);
+        OrderedPlayersWithIndividualSkills.Remove(player);        
+
+        foreach (ASkillSO groupSkill in player.CharacterInstance.GroupSkills)
+        {
+            List<CharacterSO> members = groupSkill.OwnersSO.Select(member => member as CharacterSO).ToList();
+            if (members.All(member => !member.IsAlive))
+            {
+                Debug.Log($"All members of group skill {groupSkill.name} are dead : {members.Select(member => member.name).ToCommaSeparatedString()}");
+
+                OrderedGroupSkills.Remove(groupSkill);
+            }
+        }
+    }
+
     #endregion
 
     #region Game Preparation
@@ -64,7 +83,7 @@ public class GameManager : MonoBehaviour
             CheckGameRequirements();
 
             ComputeDistributionStrategy();
-            CreateAndAssignCharactersToPlayers();
+            CreateCharacters();
         }
         catch (Exception e)
         {
@@ -95,11 +114,13 @@ public class GameManager : MonoBehaviour
         return CurrentStrategy;
     }
 
-    private void CreateAndAssignCharactersToPlayers()
+    private void CreateCharacters()
     {
         List<CharacterSO> availableCharacters = CharacterFactory.InstantiateFromDistributionStrategy(CurrentStrategy, Players.Count, out List<ASkillSO> instantiatedGroupSkills);
-        InstantiatedGroupSkills = instantiatedGroupSkills;
+        OrderedGroupSkills = instantiatedGroupSkills;
 
+        // Players' characters are affected randomly.
+        // Depending on the strategy found, it might be more available characters than actual players.
         foreach (Player player in Players)
         {
             int randomIndex = UnityEngine.Random.Range(0, availableCharacters.Count);
@@ -107,28 +128,25 @@ public class GameManager : MonoBehaviour
             availableCharacters.RemoveAt(randomIndex);
         }
 
-        GeneratePlayersWithIndividualSkillsList();
-    }
-
-    private void GeneratePlayersWithIndividualSkillsList()
-    {
-        PlayersWithIndividualSkills = new List<Player>();
+        OrderedPlayersWithIndividualSkills = new List<Player>();
         foreach (CharacterSO character in GameControl.ResolutionOrder.Characters)
         {
-            PlayersWithIndividualSkills.AddRange(Players.Where(player => player.CharacterInstance.Name.Equals(character.Name)).ToList());
+            OrderedPlayersWithIndividualSkills.AddRange(Players.Where(player => player.CharacterInstance.Name.Equals(character.Name)).ToList());
         }
+
+        AlivePlayers = new List<Player>(Players);
     }
 
     #endregion
 
     #region Game Resolution
 
-    public void StartGame()
+    public void StartGame(Action onGameCompletedOverride = null)
     {
         try
         {
             StateMachine = new GameStateMachine();
-            StateMachine.StartMachine(OnGameCompleted);
+            StateMachine.StartMachine(onGameCompletedOverride ?? OnGameCompleted);
         }
         catch (Exception e)
         {

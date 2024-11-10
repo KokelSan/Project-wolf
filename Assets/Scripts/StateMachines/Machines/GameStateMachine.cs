@@ -1,11 +1,16 @@
 public class GameStateMachine : AStateMachine
 {
     public override void InitializeMachine()
-    {
-        StartingStateName = EStateName.GameBeginning;
+    {        
+        if (!IsInitialized)
+        {
+            StartingStateName = EStateName.GameBeginning;
 
-        SetState(new GenericTimerState(StartingStateName, this, 1, EStateName.Rounds_SM));
-        SetState(new RoundsState_SM(EStateName.Rounds_SM, this));
-        SetState(new GenericTimerState(EStateName.GameEnding, this, 1, EStateName.None));
+            SetState(new GenericTimerState(StartingStateName, this, EStateName.Rounds_SM));
+            SetState(new RoundsStateMachine(EStateName.Rounds_SM, this));
+            SetState(new GenericTimerState(EStateName.GameEnding, this, EStateName.None));
+
+            IsInitialized = true;
+        }
     }
 }

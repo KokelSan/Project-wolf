@@ -1,9 +1,10 @@
+# pragma warning disable CS0414 // Disables the warning "field 'x' is assigned but its value is never used"
+
 using EditorAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(TestManager))]
@@ -12,6 +13,7 @@ public class TestLauncher : MonoBehaviour
     private TestManager testManager => GetComponent<TestManager>();
 
     private bool gamePrepared = false;
+    private bool gameStarted = false;
 
     #region Game Preparation
 
@@ -53,11 +55,21 @@ public class TestLauncher : MonoBehaviour
 
     #region Game Resolution
 
-    [Button(nameof(gamePrepared), ConditionResult.EnableDisable, false, "Test Game Resolution")]
+    [Button(nameof(gameStarted), ConditionResult.EnableDisable, true, "Test Game Resolution")]
     public void ResolveGame()
     {
-        testManager.GameManager.StartGame();
-        //DebugGameResolution();
+        if (Application.isEditor && !Application.isPlaying)
+        {
+            Debug.LogWarning("You must enter Play Mode to test game resolution.\n\n");
+            return;
+        }
+
+        if (!gamePrepared) PrepareGame();
+
+        Debug.Log("--- Starting game ---\n\n");
+
+        testManager.GameManager.StartGame(DebugGameResolution);
+        gameStarted = true;
     }
 
     #endregion
@@ -100,19 +112,18 @@ public class TestLauncher : MonoBehaviour
 
         sb.Clear();
         sb.AppendLine($"--- Resolution order ---");
-        testManager.GameManager.PlayersWithIndividualSkills.ForEach(player => sb.AppendLine($"    {player.Name} ({player.CharacterInstance.Name})"));
+        testManager.GameManager.OrderedPlayersWithIndividualSkills.ForEach(player => sb.AppendLine($"    {player.Name} ({player.CharacterInstance.Name})"));
         sb.AppendLine();
-        testManager.GameManager.InstantiatedGroupSkills.ForEach(skill => sb.AppendLine($"    {skill.name}"));
+        testManager.GameManager.OrderedGroupSkills.ForEach(skill => sb.AppendLine($"    {skill.name}"));
         Debug.Log(sb.AppendLine().ToString());
                 
     }
 
     private void DebugGameResolution()
     {
-        StringBuilder sb = new StringBuilder().AppendLine($"--- Game resolution ---").AppendLine();
-
-
-       
+        StringBuilder sb = new StringBuilder().AppendLine($"--- Game finished ---");
+        sb.AppendLine("Winners:");
+        GameManager.Instance.AlivePlayers.ForEach((player) => sb.AppendLine($"  {player.Name} ({player.CharacterInstance.name})"));      
         Debug.Log(sb.AppendLine().ToString());
     }
 
@@ -124,11 +135,11 @@ public class TestLauncher : MonoBehaviour
         transform.GetComponentsInChildren<GameManager>().ToList().ForEach(gm => DestroyImmediate(gm.gameObject));
         InstantiableSOFactory.CleanDictionnary();
         testManager.Players?.Clear();
-        gamePrepared = false;
+        gamePrepared = gameStarted = false;
     }
 
     private void OnApplicationQuit()
     {
-        if(gamePrepared) ResetTest();
+        ResetTest();
     }
 }

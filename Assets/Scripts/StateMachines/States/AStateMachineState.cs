@@ -3,7 +3,7 @@
 /// </summary>
 public abstract class AStateMachineState : AStateMachine, IState
 {
-    public override string LogIdentifier => $"    [STATE_SM {GetType()}]";
+    public override string LogIdentifier => $"[SM-STATE {GetType()}]";
 
     #region State implementations
 
@@ -14,12 +14,8 @@ public abstract class AStateMachineState : AStateMachine, IState
 
     public virtual void Enter()
     {
-        //Log($"Entering");
-
         IsCurrentState = true;
         StartMachine(OnMachineCompleted);
-
-        Log($"Entered");
     }
 
     public virtual void Update(float deltaTime) 
@@ -31,12 +27,8 @@ public abstract class AStateMachineState : AStateMachine, IState
 
     public virtual void Exit(EStateName? nextState = null)
     {
-        Log($"Exiting");
-
         IsCurrentState = false;
         StateMachine.ExitState(StateName, nextState ?? DefaultNextStateName);
-
-        //Log($"Exited");
     }
 
     #endregion
@@ -45,11 +37,6 @@ public abstract class AStateMachineState : AStateMachine, IState
     {
         StateName = stateName;
         StateMachine = stateMachine;
-    }
-
-    protected virtual void RestartMachine()
-    {
-        EnterState(StartingStateName);
     }
 
     protected virtual void OnMachineCompleted()

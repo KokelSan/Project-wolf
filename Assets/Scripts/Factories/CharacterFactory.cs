@@ -41,7 +41,7 @@ public static class CharacterFactory
 
         foreach (CharacterSO character in characters) 
         {
-            foreach (ASkillSO skill in character.GetGroupSkillsToInstanttiate())
+            foreach (ASkillSO skill in character.GetGroupSkillsToInstantiate())
             {
                 if (!groupSkillsToInstantiate.ContainsKey(skill))
                 {

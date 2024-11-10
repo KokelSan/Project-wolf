@@ -21,18 +21,9 @@ public abstract class AStateMachine : Loggable, IStateMachine
 
     public virtual void StartMachine(Action onMachineCompleted)
     {
-        Log("Starting");
-
-        if (!IsInitialized)
-        {
-            InitializeMachine();
-            IsInitialized = true;
-        }
-
+        InitializeMachine();
         OnMachineStoppedAction = onMachineCompleted;
         EnterState(StartingStateName);
-
-        //Log("Started");
     }
 
     public virtual void UpdateMachine(float deltaTime)
@@ -42,11 +33,7 @@ public abstract class AStateMachine : Loggable, IStateMachine
 
     public virtual void StopMachine()
     {
-        Log("Stopping");
-
         OnMachineStoppedAction?.Invoke();
-
-        //Log("Stopped");
     }
 
     public void SetState<T>(T state) where T : IState
@@ -68,18 +55,12 @@ public abstract class AStateMachine : Loggable, IStateMachine
             return;
         }
 
-        Log($"Entering '{stateName}'");
-
         CurrentStateName = stateName;
         CurrentState.Enter();
-
-        //Log($"'{stateName}' entered");
     }
 
     public void ExitState(EStateName stateToExit, EStateName nextState)
     {
-        Log($"Exiting '{stateToExit}' for '{nextState}'");
-
         if (!stateToExit.Equals(CurrentStateName))
         {
             LogWarning($"Trying to exit state '{stateToExit}' but it is not the current one");
@@ -100,7 +81,7 @@ public abstract class AStateMachine : Loggable, IStateMachine
 
         if (nextState.Equals(stateToExit))
         {
-            TryReEnterState();
+            TryReEnterCurrentState();
             return;
         }
 
@@ -109,6 +90,6 @@ public abstract class AStateMachine : Loggable, IStateMachine
 
     #endregion
 
-    public virtual void TryReEnterState() { }
+    public virtual void TryReEnterCurrentState() { }
 
 }

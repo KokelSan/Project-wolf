@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9327b5b9ae90fc44b88fab71bc4d9f0d, type: 3}
-  m_Name: Werewolf_Archetype
+  m_Name: A_Werewolf
   m_EditorClassIdentifier: 
   Name: Werewolf
   Description: Werevolves gather at night to determine which citizen will be the

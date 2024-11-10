@@ -3,7 +3,7 @@
 /// </summary>
 public abstract class AState : Loggable, IState
 {
-    public override string LogIdentifier => $"        [STATE {StateName}]";
+    public override string LogIdentifier => $"[STATE {StateName}]";
 
     #region IState implementations
 
@@ -20,23 +20,15 @@ public abstract class AState : Loggable, IState
 
     public virtual void Enter()
     {
-        //Log("Entering");
-
         IsCurrentState = true;
-
-        Log("Entered");
     }
 
     public virtual void Update(float deltaTime) { }
 
     public virtual void Exit(EStateName? nextState = null)
     {
-        Log("Exiting");
-
         IsCurrentState = false;
         StateMachine.ExitState(StateName, nextState ?? DefaultNextStateName);
-
-        //Log("Exited");
     }
 
     #endregion      

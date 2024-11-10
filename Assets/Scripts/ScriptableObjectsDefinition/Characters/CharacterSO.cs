@@ -24,7 +24,7 @@ public class CharacterSO : InstantiableSO
         GroupSkills.Clear();
     }
 
-    public List<ASkillSO> GetGroupSkillsToInstanttiate()
+    public List<ASkillSO> GetGroupSkillsToInstantiate()
     {
         return parent?.GroupSkills ?? new List<ASkillSO>();
     }

@@ -4,12 +4,14 @@
 /// </summary>
 public abstract class ATimerState : AState
 {
-    protected float duration = 3f;
+    private const float DefaultDuration = .1f;
+
+    protected float duration;
     protected float timer = 0f;
 
-    public ATimerState(EStateName stateName, IStateMachine stateMachine, float duration) : base(stateName, stateMachine)
+    public ATimerState(EStateName stateName, IStateMachine stateMachine, float? duration = null) : base(stateName, stateMachine)
     {
-        this.duration = duration;
+        this.duration = duration ?? DefaultDuration;
     }
 
     public override void Enter()
@@ -38,7 +40,7 @@ public abstract class ATimerState : AState
 
 public class GenericTimerState : ATimerState
 {
-    public GenericTimerState(EStateName stateName, IStateMachine stateMachine, float duration, EStateName nextState) : base(stateName, stateMachine, duration)
+    public GenericTimerState(EStateName stateName, IStateMachine stateMachine, EStateName nextState, float? duration = null) : base(stateName, stateMachine, duration)
     {
         DefaultNextStateName = nextState;
     }

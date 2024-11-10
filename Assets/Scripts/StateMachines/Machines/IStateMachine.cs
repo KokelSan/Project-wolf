@@ -37,7 +37,7 @@ public interface IStateMachine
     Action OnMachineStoppedAction { get; }
 
     /// <summary>
-    /// Called at the beginning of <see cref="StartMachine(Action)"/> if <see cref="IsInitialized"/> is false. Initializes the machine by instantiating and adding its states
+    /// Called at the beginning of <see cref="StartMachine(Action)"/> before entering the starting state. Useful to initializes the machine by instantiating and adding its states or refresh some data in case of restart
     /// </summary>
     void InitializeMachine();
 
@@ -78,12 +78,12 @@ public interface IStateMachine
     /// <param name="nextState">
     /// The next state to enter. If equals : <br/>
     /// - <see cref="EStateName.None"/> : the machine will be exited <br/>
-    /// - <paramref name="stateToExit"/> : the state will be reseted (see <see cref="TryReEnterState"/>) before getting entered
+    /// - <paramref name="stateToExit"/> : the state will be reseted (see <see cref="TryReEnterCurrentState"/>) before getting entered
     /// </param>
     void ExitState(EStateName stateToExit, EStateName nextState = EStateName.None);
 
     /// <summary>
     /// Called before re-entering the current state
     /// </summary>
-    void TryReEnterState();
+    void TryReEnterCurrentState();
 }
