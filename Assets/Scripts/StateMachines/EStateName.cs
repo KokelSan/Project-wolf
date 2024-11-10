@@ -2,18 +2,19 @@ public enum EStateName
 {
     None = 0,
 
-    // GameStateMachine
+    // GameStateMachine's states
     GameBeginning,
-    RoundsLoop,
+    Rounds_SM,
     GameEnding,
 
-    // RoundStateMachine
+    // Rounds_SM's states
     RoundBeginning,
-    SkillsLoop,
+    IndividualSkills_SM,
+    GroupSkills_SM,
+    GeneralVote,
     RoundEnding,
 
-    // SkillsLoop
+    // Skills_SM's states
     IndividualSkill,
     GroupSkill,
-
 }

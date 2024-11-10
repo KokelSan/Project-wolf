@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Base interface for implementing a state machine
+/// </summary>
 public interface IStateMachine
 {
     /// <summary>
@@ -9,22 +12,32 @@ public interface IStateMachine
     Dictionary<EStateName, IState> States { get; }
 
     /// <summary>
-    /// The key of the current state the machine is in
+    /// The name of the state to enter when the machine is started
     /// </summary>
-    EStateName CurrentStateKey { get; }
+    EStateName StartingStateName { get; }
 
     /// <summary>
-    /// The state the machine is in. Retrieved with <see cref="CurrentStateKey"/>
+    /// The name of the current state of the machine
+    /// </summary>
+    EStateName CurrentStateName { get; }
+
+    /// <summary>
+    /// The current state of the machine. Retrieved with <see cref="CurrentStateName"/>
     /// </summary>
     IState CurrentState { get; }
 
     /// <summary>
-    /// Action to perform when the machine exits
+    /// True if the machine has already been initialized, false otherwise
     /// </summary>
-    Action OnMachineCompleted { get; }
+    bool IsInitialized { get; }
 
     /// <summary>
-    /// Initializes the machine by instantiating and adding its states
+    /// Action to perform when the machine exits
+    /// </summary>
+    Action OnMachineStoppedAction { get; }
+
+    /// <summary>
+    /// Called at the beginning of <see cref="StartMachine(Action)"/> if <see cref="IsInitialized"/> is false. Initializes the machine by instantiating and adding its states
     /// </summary>
     void InitializeMachine();
 
@@ -35,31 +48,15 @@ public interface IStateMachine
     void StartMachine(Action onMachineCompleted);
 
     /// <summary>
-    /// Called at the beginning of <see cref="StartMachine(Action)"/>
-    /// </summary>
-    void OnStart();
-
-    /// <summary>
-    /// Updates the machine on a time basis
+    /// Updates the machine and its current state on a time basis
     /// </summary>
     /// <param name="deltaTime">Elapsed time between the previous frame</param>
     void UpdateMachine(float deltaTime);
 
     /// <summary>
-    /// Called at the beginning of <see cref="UpdateMachine(float)"/>
+    /// Terminates the machine and trigger the <see cref="OnMachineStoppedAction"/> action
     /// </summary>
-    /// <param name="deltaTime">Elapsed time between the previous frame</param>
-    void OnUpdate(float deltaTime);
-
-    /// <summary>
-    /// Terminates the machine and trigger the <see cref="OnMachineCompleted"/> action
-    /// </summary>
-    void ExitMachine();
-
-    /// <summary>
-    /// Called at the beginning of <see cref="ExitMachine()"/>
-    /// </summary>
-    void OnExit();
+    void StopMachine();
 
     /// <summary>
     /// Adds or set a state in the<see cref="States"/> dictionnary
@@ -81,12 +78,12 @@ public interface IStateMachine
     /// <param name="nextState">
     /// The next state to enter. If equals : <br/>
     /// - <see cref="EStateName.None"/> : the machine will be exited <br/>
-    /// - <paramref name="stateToExit"/> : the state will be reseted (see <see cref="ResetCurrentState"/>) before getting entered
+    /// - <paramref name="stateToExit"/> : the state will be reseted (see <see cref="TryReEnterState"/>) before getting entered
     /// </param>
     void ExitState(EStateName stateToExit, EStateName nextState = EStateName.None);
 
     /// <summary>
     /// Called before re-entering the current state
     /// </summary>
-    void ResetCurrentState();
+    void TryReEnterState();
 }

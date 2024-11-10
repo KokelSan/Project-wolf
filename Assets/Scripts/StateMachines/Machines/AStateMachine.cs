@@ -1,45 +1,53 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public abstract class AStateMachine : IStateMachine
+/// <summary>
+/// Base class to derive from to create a state machine
+/// </summary>
+public abstract class AStateMachine : Loggable, IStateMachine
 {
-    #region Interface implementations
+    public override string LogIdentifier => $"[MACHINE {GetType()}]";
+
+    #region IStateMachine implementations
 
     public Dictionary<EStateName, IState> States { get; protected set; } = new Dictionary<EStateName, IState>() { { EStateName.None, null } };
-    public EStateName CurrentStateKey { get; protected set; } = EStateName.None;
-    public IState CurrentState => States[CurrentStateKey];
-    public Action OnMachineCompleted { get; protected set; }
+    public EStateName StartingStateName { get; protected set; }
+    public EStateName CurrentStateName { get; protected set; } = EStateName.None;
+    public IState CurrentState => States[CurrentStateName];
+    public bool IsInitialized { get; protected set; }
+    public Action OnMachineStoppedAction { get; protected set; }    
 
     public abstract void InitializeMachine();
 
-    public void StartMachine(Action onMachineCompleted)
+    public virtual void StartMachine(Action onMachineCompleted)
     {
-        Debug.Log($"Starting machine '{GetType()}'");
+        Log("Starting");
 
-        OnStart();
-        OnMachineCompleted = onMachineCompleted;        
+        if (!IsInitialized)
+        {
+            InitializeMachine();
+            IsInitialized = true;
+        }
+
+        OnMachineStoppedAction = onMachineCompleted;
+        EnterState(StartingStateName);
+
+        //Log("Started");
     }
 
-    public abstract void OnStart();
-
-    public void UpdateMachine(float deltaTime)
+    public virtual void UpdateMachine(float deltaTime)
     {        
-        OnUpdate(deltaTime);
         CurrentState?.Update(deltaTime);
     }
 
-    public abstract void OnUpdate(float deltaTime);
-
-    public void ExitMachine()
+    public virtual void StopMachine()
     {
-        Debug.Log($"Exiting machine '{GetType()}'");
+        Log("Stopping");
 
-        OnExit();
-        OnMachineCompleted?.Invoke();
+        OnMachineStoppedAction?.Invoke();
+
+        //Log("Stopped");
     }
-
-    public abstract void OnExit();
 
     public void SetState<T>(T state) where T : IState
     {
@@ -47,49 +55,60 @@ public abstract class AStateMachine : IStateMachine
     }
 
     public void EnterState(EStateName stateName)
-    {
-        if (!States.ContainsKey(stateName))
-        {            
-            Debug.LogWarning($"State '{stateName.ToString()}' is not registered as a state of the machine");
+    {       
+        if (stateName.Equals(EStateName.None))
+        {
+            LogWarning("Trying to enter the 'None' state");
             return;
         }
 
-        CurrentStateKey = stateName;
+        if (!States.ContainsKey(stateName))
+        {            
+            LogWarning($"Trying to enter the unregistered state '{stateName}'");
+            return;
+        }
+
+        Log($"Entering '{stateName}'");
+
+        CurrentStateName = stateName;
         CurrentState.Enter();
+
+        //Log($"'{stateName}' entered");
     }
 
     public void ExitState(EStateName stateToExit, EStateName nextState)
     {
+        Log($"Exiting '{stateToExit}' for '{nextState}'");
+
+        if (!stateToExit.Equals(CurrentStateName))
+        {
+            LogWarning($"Trying to exit state '{stateToExit}' but it is not the current one");
+            return;
+        }
+
         if (!States.ContainsKey(stateToExit))
         {
-            Debug.LogWarning($"Trying to exit unregistered state '{stateToExit.ToString()}'");
+            LogWarning($"Trying to exit the unregistered state '{stateToExit}'");
             return;
         }        
 
         if (nextState.Equals(EStateName.None))
         {
-            ExitMachine();
-        } 
-        else
+            StopMachine();
+            return;
+        }      
+
+        if (nextState.Equals(stateToExit))
         {
-            if (nextState.Equals(stateToExit))
-            {
-                ResetCurrentState();
-            }
+            TryReEnterState();
+            return;
+        }
 
-            EnterState(nextState);
-        }        
-    }
-
-    public virtual void ResetCurrentState()
-    {
-        CurrentState.Reset();
+        EnterState(nextState);
     }
 
     #endregion
 
-    public AStateMachine()
-    {
-        InitializeMachine();
-    }
+    public virtual void TryReEnterState() { }
+
 }

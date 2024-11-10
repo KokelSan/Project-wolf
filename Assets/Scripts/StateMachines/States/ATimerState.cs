@@ -1,18 +1,21 @@
-
+/// <summary>
+/// Base class to derive from to create a state based on a limited duration. <br/>
+/// The state will automatically exit after the given duration.
+/// </summary>
 public abstract class ATimerState : AState
 {
     protected float duration = 3f;
     protected float timer = 0f;
-    protected EStateName nextState = EStateName.None;
 
     public ATimerState(EStateName stateName, IStateMachine stateMachine, float duration) : base(stateName, stateMachine)
     {
         this.duration = duration;
     }
 
-    public override void OnEnter()
-    {
+    public override void Enter()
+    {       
         timer = 0f;
+        base.Enter();
     }
 
     public override void Update(float deltaTime) 
@@ -23,11 +26,20 @@ public abstract class ATimerState : AState
 
         if (timer >= duration)
         {
-            Exit(nextState);
+            Exit();
+            return;
         }
 
         OnTimerUpdated(deltaTime);
     }
 
-    public abstract void OnTimerUpdated(float deltaTime);
+    public virtual void OnTimerUpdated(float deltaTime) { }
+}
+
+public class GenericTimerState : ATimerState
+{
+    public GenericTimerState(EStateName stateName, IStateMachine stateMachine, float duration, EStateName nextState) : base(stateName, stateMachine, duration)
+    {
+        DefaultNextStateName = nextState;
+    }
 }

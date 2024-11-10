@@ -1,4 +1,6 @@
-
+/// <summary>
+/// Base interface for implementing a state of a state machine
+/// </summary>
 public interface IState
 {
     /// <summary>
@@ -12,19 +14,19 @@ public interface IState
     IStateMachine StateMachine { get; }
 
     /// <summary>
-    /// True if the state is the current state of its state machine, False otherwise
+    /// True if the state is the current state of its owning state machine, False otherwise
     /// </summary>
     bool IsCurrentState { get; }
+
+    /// <summary>
+    /// The default next state of the machine after exiting this one
+    /// </summary>
+    EStateName DefaultNextStateName { get; }
 
     /// <summary>
     /// Called by the state machine to enter this state
     /// </summary>
     void Enter();
-
-    /// <summary>
-    /// Called at the beginning of <see cref="Enter()"/>
-    /// </summary>
-    void OnEnter();
 
     /// <summary>
     /// Updates the state on a time basis
@@ -33,24 +35,9 @@ public interface IState
     void Update(float deltaTime);
 
     /// <summary>
-    /// Called at the beginning of <see cref="Update(float)"/>
-    /// </summary>
-    /// <param name="deltaTime">Elapsed time between the previous frame</param>
-    void OnUpdate(float deltaTime);
-
-    /// <summary>
-    /// Called to reset the state before re-entering it
-    /// </summary>
-    void Reset();
-
-    /// <summary>
-    /// Notify the state machine to exit this state, and optionnaly enter a next one
+    /// Notify the state machine to exit this state, and optionnaly enter a next one. <br/>
+    /// If <paramref name="nextState"/> is null, the next state will be <see cref="DefaultNextStateName"/>
     /// </summary>
     /// <param name="nextState">The next state to enter in</param>
-    void Exit(EStateName nextState);
-
-    /// <summary>
-    /// Called by <see cref="Exit(EStateName)"/> before notifying the state machine
-    /// </summary>
-    void OnExit();
+    void Exit(EStateName? nextState);
 }

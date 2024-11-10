@@ -1,40 +1,32 @@
 using System.Collections.Generic;
 using System.Linq;
 
-public class RoundsLoopState : AState
+public class RoundsState_SM : AStateMachineState
 {       
-    private RoundStateMachine turnStateMachine;
+    public RoundsState_SM(EStateName stateName, IStateMachine stateMachine) : base(stateName, stateMachine) { }
 
-    public RoundsLoopState(EStateName stateName, IStateMachine stateMachine) : base(stateName, stateMachine) { }
-
-    public override void OnEnter()
+    public override void InitializeMachine()
     {
-        StartNewTurn();
-    }
+        StartingStateName = EStateName.RoundBeginning;
+        DefaultNextStateName = EStateName.GameEnding;
 
-    public override void Update(float deltaTime)
-    {
-        turnStateMachine?.UpdateMachine(deltaTime);
-    }
+        SetState(new GenericTimerState(StartingStateName, this, 1, EStateName.IndividualSkills_SM));
+        SetState(new IndividualSkillsState_SM(EStateName.IndividualSkills_SM, this));
+        // inter skills state ?
+        SetState(new GroupSkillsState_SM(EStateName.GroupSkills_SM, this));
+        // General vote
+        SetState(new GenericTimerState(EStateName.RoundEnding, this, 1, EStateName.None));        
+    }    
 
-    public override void OnExit() { }
-
-    private void StartNewTurn()
-    {
-        turnStateMachine = new RoundStateMachine();
-        turnStateMachine.StartMachine(OnTurnCompleted);
-    }
-
-    private void OnTurnCompleted()
+    protected override void OnMachineCompleted()
     {
         if (AlivePlayersAreWinning())
         {
-            Exit(EStateName.GameEnding);
+            Exit();
+            return;
         }
-        else
-        {
-            StartNewTurn();
-        }        
+
+        RestartMachine();
     }    
 
     private bool AlivePlayersAreWinning()
@@ -59,7 +51,5 @@ public class RoundsLoopState : AState
 
         return standingGroupCount == 1;
     }
-
-    public override void OnUpdate(float deltaTime) { }
-    public override void Reset() { }
+    
 }
