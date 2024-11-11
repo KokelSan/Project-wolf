@@ -5,7 +5,7 @@ using UnityEngine;
 public class ColorTester : MonoBehaviour
 {
     [Button]
-    public void DebugColor()
+    public void Test()
     {       
         foreach (LogColor color in Enum.GetValues(typeof(LogColor)))
         {

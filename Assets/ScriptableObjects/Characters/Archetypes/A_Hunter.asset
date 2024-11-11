@@ -16,5 +16,4 @@ MonoBehaviour:
   Description: The hunter is a strong citizen who can bring one to death with him
   IndividualSkills:
   - {fileID: 11400000, guid: 660046cff4d7ab849875faa44d4ca983, type: 2}
-  GroupSkills:
-  - {fileID: 11400000, guid: 26c974d2ea0c3bd43a1b278fe0a5ccdb, type: 2}
+  GroupSkills: []
