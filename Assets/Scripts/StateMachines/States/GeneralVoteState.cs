@@ -5,7 +5,7 @@ using System.Text;
 public class GeneralVoteState : ATimerState
 {
     public override string LogIdentifier => $"[GENERAL VOTE]";
-    public override LogColor LogIdentifierColor => LogColor.orange;
+    public override LogColor LogIdentifierColor => LogColor.red;
 
     private List<Player> AlivePlayers => GameManager.Instance?.AlivePlayers;
 
@@ -19,7 +19,7 @@ public class GeneralVoteState : ATimerState
 
         StringBuilder sb = new StringBuilder().AppendLine($"{playerToKill.Name} killed ({playerToKill.CharacterInstance.name})").AppendLine($"Alive players:");
         AlivePlayers.ForEach((player) => sb.AppendLine($"  {player.CharacterInstance.name}"));
-        Log(sb.ToString());
+        Log(sb.ToString(), messageColor:LogIdentifierColor);
 
         IsCurrentState = false;
         StateMachine.ExitState(StateName, nextState ?? DefaultNextStateName);

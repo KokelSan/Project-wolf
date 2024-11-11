@@ -8,10 +8,31 @@ public abstract class Loggable
     public void Log(string message, bool withIdentifier = true, LogColor? messageColor = null)
     {
         string identifier = withIdentifier ? $"{ApplyColor(LogIdentifier, LogIdentifierColor)} " : "";
-        Debug.Log($"{identifier}{ApplyColor(message, messageColor)}");
+
+        if (messageColor == null)
+        {
+            Debug.Log($"{identifier}{message}\n\n");
+            return;
+        }
+
+        // The first line of the message is considered as the essential and relevant data and will be colorized, the rest of the message will appear normally
+        int fistLineDelimiter = message.IndexOf("\n");
+        string firstLineContent, restOfContent;
+        if (fistLineDelimiter < 0)
+        {
+            firstLineContent = message;
+            restOfContent = "";
+        }
+        else
+        {
+            firstLineContent = message.Substring(0, fistLineDelimiter);
+            restOfContent = message.Substring(fistLineDelimiter);
+        }
+
+        Debug.Log($"{identifier}{ApplyColor(firstLineContent, messageColor)}{restOfContent}\n\n");
     }
 
-    private string ApplyColor(string message, LogColor? color = null)
+    private string ApplyColor(string message, LogColor? color)
     {
         if (color == null) return message;
 

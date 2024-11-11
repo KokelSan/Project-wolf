@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -16,8 +15,12 @@ public class GameManager : MonoBehaviour
     public DistributionStrategy CurrentStrategy { get; private set; }
     public List<Player> AlivePlayers { get; private set; }
     public List<Player> OrderedPlayersWithIndividualSkills { get; private set; }
+    public List<List<Player>> PlayersWinningGroups { get; private set; }
     public List<ASkillSO> OrderedGroupSkills { get; private set; }
     public GameStateMachine StateMachine { get; private set; }
+
+    // End game
+    public List<Player> WinningPlayers { get; private set; }
 
     #region Members Management
 
@@ -65,11 +68,14 @@ public class GameManager : MonoBehaviour
             List<CharacterSO> members = groupSkill.OwnersSO.Select(member => member as CharacterSO).ToList();
             if (members.All(member => !member.IsAlive))
             {
-                Debug.Log($"All members of group skill {groupSkill.name} are dead : {members.Select(member => member.name).ToCommaSeparatedString()}");
-
                 OrderedGroupSkills.Remove(groupSkill);
             }
         }
+    }
+
+    public void SetWinners(List<Player> winners)
+    {
+        WinningPlayers = winners;
     }
 
     #endregion
@@ -135,6 +141,13 @@ public class GameManager : MonoBehaviour
         }
 
         AlivePlayers = new List<Player>(Players);
+        PlayersWinningGroups = new List<List<Player>>();
+
+        foreach (CharactersList charactersList in GameControl.WinningGroups.Groups)
+        {
+            List<Player> playersInGroup = Players.Join(charactersList.Members, player => player.CharacterInstance.Name, member => member.Name, (player, member) => player).ToList();
+            PlayersWinningGroups.Add(playersInGroup);
+        }
     }
 
     #endregion

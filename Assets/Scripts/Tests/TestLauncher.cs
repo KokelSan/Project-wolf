@@ -123,7 +123,9 @@ public class TestLauncher : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder().AppendLine($"--- Game finished ---");
         sb.AppendLine("Winners:");
-        GameManager.Instance.AlivePlayers.ForEach((player) => sb.AppendLine($"  {player.Name} ({player.CharacterInstance.name})"));      
+        GameManager.Instance.WinningPlayers.OrderByDescending(player => player.CharacterInstance.IsAlive).ToList().ForEach((player) => sb.AppendLine($"  {player.Name} ({player.CharacterInstance.name}{(player.CharacterInstance.IsAlive ? "" : ", dead")})"));
+
+
         Debug.Log(sb.AppendLine().ToString());
     }
 

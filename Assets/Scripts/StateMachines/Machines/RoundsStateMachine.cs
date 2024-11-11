@@ -23,7 +23,7 @@ public class RoundsStateMachine : AStateMachineState
 
     protected override void OnMachineCompleted()
     {
-        if (AlivePlayersAreWinning())
+        if (AlivePlayersWin())
         {
             Exit();
             return;
@@ -46,26 +46,25 @@ public class RoundsStateMachine : AStateMachineState
         EnterState(EStateName.GeneralVote);
     }
 
-    private bool AlivePlayersAreWinning()
+    private bool AlivePlayersWin()
     {
         // Alive players are winning if they all belong to the same winning group, i.e there is only one group represented by alive players
+        List<List<Player>> standingGroups = new List<List<Player>>();
 
-        List<Player> alivePlayers = GameManager.Instance?.AlivePlayers;
-        List<CharactersList> winningGroups = GameManager.Instance?.GameControl?.WinningGroups?.Groups;
-
-        int standingGroupCount = 0;
-
-        foreach (CharactersList charactersList in winningGroups)
+        foreach (List<Player> playersList in GameManager.Instance.PlayersWinningGroups)
         {
-            List<string> membersName = charactersList.Members.Select(member => member.Name).ToList();
-
-            if (alivePlayers.Exists(player => membersName.Contains(player.CharacterInstance.Name)))
+            if (playersList.Any(player => player.IsAlive))
             {
-                standingGroupCount++;
-                continue;
-            }
+                standingGroups.Add(playersList);
+            }            
         }
 
-        return standingGroupCount == 1;
+        if (standingGroups.Count == 1)
+        {
+            GameManager.Instance.SetWinners(standingGroups.FirstOrDefault());
+            return true;
+        }
+
+        return false;
     }    
 }
