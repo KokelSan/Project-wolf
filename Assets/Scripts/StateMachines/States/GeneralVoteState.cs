@@ -5,6 +5,7 @@ using System.Text;
 public class GeneralVoteState : ATimerState
 {
     public override string LogIdentifier => $"[GENERAL VOTE]";
+    public override LogColor LogIdentifierColor => LogColor.orange;
 
     private List<Player> AlivePlayers => GameManager.Instance?.AlivePlayers;
 

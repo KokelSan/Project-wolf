@@ -1,6 +1,7 @@
 ﻿public class IndividualSkillState : ATimerState
 {
     public override string LogIdentifier => $"[INDIVIDUAL SKILLS]";
+    public override LogColor LogIdentifierColor => LogColor.lime;
 
     private Player player;
 

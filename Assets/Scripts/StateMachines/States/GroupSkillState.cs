@@ -5,6 +5,7 @@ using System.Text;
 public class GroupSkillState : ATimerState
 {
     public override string LogIdentifier => $"[GROUP SKILL]";
+    public override LogColor LogIdentifierColor => LogColor.cyan;
 
     private ASkillSO skill;
 

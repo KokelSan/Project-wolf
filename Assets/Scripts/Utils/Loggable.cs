@@ -3,19 +3,52 @@
 public abstract class Loggable
 {
     public abstract string LogIdentifier { get; }
+    public virtual LogColor LogIdentifierColor { get; } = LogColor.white;
 
-    public void Log(string message, bool withIdentifier = true)
+    public void Log(string message, bool withIdentifier = true, LogColor? messageColor = null)
     {
-        Debug.Log($"{(withIdentifier ? $"{LogIdentifier} " : "")}{message}\n\n");
+        string identifier = withIdentifier ? $"{ApplyColor(LogIdentifier, LogIdentifierColor)} " : "";
+        Debug.Log($"{identifier}{ApplyColor(message, messageColor)}");
     }
 
-    public void LogWarning(string message, bool withIdentifier = true)
+    private string ApplyColor(string message, LogColor? color = null)
     {
-        Debug.LogWarning($"{(withIdentifier ? $"{LogIdentifier} " : "")}{message}\n\n");
+        if (color == null) return message;
+
+        return $"<color={color}>{message}</color>";
     }
 
-    public void LogError(string message, bool withIdentifier = true)
+    public void LogWarning(string message)
     {
-        Debug.LogError($"{(withIdentifier ? $"{LogIdentifier} " : "")}{message}\n\n");
+        Debug.LogWarning(message);
     }
+
+    public void LogError(string message)
+    {
+        Debug.LogError(message);
+    }    
+}
+
+public enum LogColor
+{
+    black,
+    blue,
+    brown,
+    cyan,
+    darkblue,
+    green,
+    grey,
+    lightblue,
+    lime,
+    magenta,
+    maroon,
+    navy,
+    olive,
+    orange,
+    purple,
+    red,
+    silver,
+    teal,
+    white,
+    yellow
 }
