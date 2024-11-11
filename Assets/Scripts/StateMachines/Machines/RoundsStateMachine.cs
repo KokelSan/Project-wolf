@@ -2,8 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 public class RoundsStateMachine : AStateMachineState
-{       
-    public RoundsStateMachine(EStateName stateName, IStateMachine stateMachine) : base(stateName, stateMachine) { }
+{
+    public RoundsStateMachine(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName)
+        : base(stateName, stateMachine, defaultNextStateName)
+    {
+    }
 
     public override void InitializeMachine()
     {
@@ -12,12 +15,13 @@ public class RoundsStateMachine : AStateMachineState
             StartingStateName = EStateName.RoundBeginning;
             DefaultNextStateName = EStateName.GameEnding;
 
-            SetState(new GenericTimerState(StartingStateName, this, EStateName.IndividualSkills_SM));
-            SetState(new IndividualSkillsStateMachine(EStateName.IndividualSkills_SM, this));
+            SetState(new RoundBeginningState(StartingStateName, this, EStateName.IndividualSkills_SM));
+            SetState(new IndividualSkillsStateMachine(EStateName.IndividualSkills_SM, this, EStateName.GroupSkills_SM));
             // inter skills state ?
-            SetState(new GroupSkillsStateMachine(EStateName.GroupSkills_SM, this));
-            SetState(new GeneralVoteState(EStateName.GeneralVote, this));
-            SetState(new GenericTimerState(EStateName.RoundEnding, this, EStateName.None));
+            SetState(new GroupSkillsStateMachine(EStateName.GroupSkills_SM, this, EStateName.GeneralVote));
+            // skills revelation state ?
+            SetState(new GeneralVoteState(EStateName.GeneralVote, this, EStateName.RoundEnding));
+            SetState(new RoundEndingState(EStateName.RoundEnding, this, EStateName.None));
         }       
     }
 
@@ -29,21 +33,7 @@ public class RoundsStateMachine : AStateMachineState
             return;
         }
 
-        Log("--- New round ---", withIdentifier: false);
-
-        if (GameManager.Instance.OrderedPlayersWithIndividualSkills.Any())
-        {
-            EnterState(EStateName.IndividualSkills_SM);
-            return;
-        }
-
-        if (GameManager.Instance.OrderedGroupSkills.Any())
-        {
-            EnterState(EStateName.GroupSkills_SM);
-            return;
-        }
-
-        EnterState(EStateName.GeneralVote);
+        EnterState(EStateName.RoundBeginning);
     }
 
     private bool AlivePlayersWin()

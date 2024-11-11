@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 public abstract class AStateMachine : Loggable, IStateMachine
 {
-    public override string LogIdentifier => $"[MACHINE {GetType()}]";
+    public override string LogTag => $"[MACHINE {GetType()}]";
 
     #region IStateMachine implementations
 

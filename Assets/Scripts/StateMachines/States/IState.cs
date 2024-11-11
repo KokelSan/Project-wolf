@@ -35,9 +35,7 @@ public interface IState
     void Update(float deltaTime);
 
     /// <summary>
-    /// Notify the state machine to exit this state, and optionnaly enter a next one. <br/>
-    /// If <paramref name="nextState"/> is null, the next state will be <see cref="DefaultNextStateName"/>
+    /// Notify the state machine to exit this state
     /// </summary>
-    /// <param name="nextState">The next state to enter in</param>
-    void Exit(EStateName? nextState);
+    void Exit();
 }

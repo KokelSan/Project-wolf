@@ -3,15 +3,18 @@ using UnityEngine;
 using System.Text;
 
 public class GeneralVoteState : ATimerState
-{
-    public override string LogIdentifier => $"[GENERAL VOTE]";
-    public override LogColor LogIdentifierColor => LogColor.red;
+{    
+    public override string LogTag => $"[GENERAL VOTE]";
+    public override LogColor TagColor => LogColor.red;
 
     private List<Player> AlivePlayers => GameManager.Instance?.AlivePlayers;
 
-    public GeneralVoteState(EStateName stateName, IStateMachine stateMachine, float? duration = null) : base(stateName, stateMachine, duration) { }
+    public GeneralVoteState(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName, float? duration = null)
+        : base(stateName, stateMachine, defaultNextStateName, duration)
+    {
+    }
 
-    public override void Exit(EStateName? nextState = null)
+    public override void Exit()
     {
         int playerIndex = Random.Range(0, AlivePlayers.Count);
         Player playerToKill = AlivePlayers[playerIndex];
@@ -19,9 +22,8 @@ public class GeneralVoteState : ATimerState
 
         StringBuilder sb = new StringBuilder().AppendLine($"{playerToKill.Name} killed ({playerToKill.CharacterInstance.name})").AppendLine($"Alive players:");
         AlivePlayers.ForEach((player) => sb.AppendLine($"  {player.CharacterInstance.name}"));
-        Log(sb.ToString(), messageColor:LogIdentifierColor);
+        Log(sb.ToString(), messageColor:TagColor);
 
-        IsCurrentState = false;
-        StateMachine.ExitState(StateName, nextState ?? DefaultNextStateName);
+        base.Exit();
     }
 }

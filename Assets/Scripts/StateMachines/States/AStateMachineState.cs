@@ -3,7 +3,7 @@
 /// </summary>
 public abstract class AStateMachineState : AStateMachine, IState
 {
-    public override string LogIdentifier => $"[SM-STATE {GetType()}]";
+    public override string LogTag => $"[SM-STATE {GetType()}]";
 
     #region State implementations
 
@@ -25,22 +25,23 @@ public abstract class AStateMachineState : AStateMachine, IState
         UpdateMachine(deltaTime);
     }
 
-    public virtual void Exit(EStateName? nextState = null)
+    public virtual void Exit()
     {
         IsCurrentState = false;
-        StateMachine.ExitState(StateName, nextState ?? DefaultNextStateName);
+        StateMachine.ExitState(StateName, DefaultNextStateName);
     }
 
     #endregion
 
-    public AStateMachineState(EStateName stateName, IStateMachine stateMachine)
+    public AStateMachineState(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName)
     {
         StateName = stateName;
         StateMachine = stateMachine;
+        DefaultNextStateName = defaultNextStateName;
     }
 
     protected virtual void OnMachineCompleted()
     {
-        Exit(DefaultNextStateName);
+        Exit();
     }
 }

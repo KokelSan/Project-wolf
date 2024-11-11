@@ -9,7 +9,8 @@ public abstract class ATimerState : AState
     protected float duration;
     protected float timer = 0f;
 
-    public ATimerState(EStateName stateName, IStateMachine stateMachine, float? duration = null) : base(stateName, stateMachine)
+    public ATimerState(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName, float? duration = null)
+        : base(stateName, stateMachine, defaultNextStateName)
     {
         this.duration = duration ?? DefaultDuration;
     }
@@ -40,8 +41,8 @@ public abstract class ATimerState : AState
 
 public class GenericTimerState : ATimerState
 {
-    public GenericTimerState(EStateName stateName, IStateMachine stateMachine, EStateName nextState, float? duration = null) : base(stateName, stateMachine, duration)
+    public GenericTimerState(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName, float? duration = null)
+        : base(stateName, stateMachine, defaultNextStateName, duration) 
     {
-        DefaultNextStateName = nextState;
     }
 }

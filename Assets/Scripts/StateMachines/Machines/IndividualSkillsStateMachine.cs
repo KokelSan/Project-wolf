@@ -7,7 +7,10 @@ public class IndividualSkillsStateMachine : AStateMachineState
     private int currentPlayerIndex;
     private IndividualSkillState individualSkillState;
 
-    public IndividualSkillsStateMachine(EStateName stateName, IStateMachine stateMachine) : base(stateName, stateMachine) { }
+    public IndividualSkillsStateMachine(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName)
+        : base(stateName, stateMachine, defaultNextStateName)
+    {
+    }
 
     public override void InitializeMachine() 
     {
@@ -16,7 +19,7 @@ public class IndividualSkillsStateMachine : AStateMachineState
             StartingStateName = EStateName.Skill;
             DefaultNextStateName = EStateName.GroupSkills_SM;
 
-            individualSkillState = new IndividualSkillState(StartingStateName, this);
+            individualSkillState = new IndividualSkillState(StartingStateName, this, EStateName.Skill);
             SetState(individualSkillState);   
 
             IsInitialized = true;

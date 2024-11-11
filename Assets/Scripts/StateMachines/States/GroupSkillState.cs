@@ -4,14 +4,14 @@ using System.Text;
 
 public class GroupSkillState : ATimerState
 {
-    public override string LogIdentifier => $"[GROUP SKILL]";
-    public override LogColor LogIdentifierColor => LogColor.cyan;
+    public override string LogTag => $"[GROUP SKILL]";
+    public override LogColor TagColor => LogColor.cyan;
 
     private ASkillSO skill;
 
-    public GroupSkillState(EStateName stateName, IStateMachine stateMachine, float? duration = null) : base(stateName, stateMachine, duration)
+    public GroupSkillState(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName, float? duration = null)
+        : base(stateName, stateMachine, defaultNextStateName, duration)
     {
-        DefaultNextStateName = stateName;
     }
 
     public void SetSkill(ASkillSO skill)

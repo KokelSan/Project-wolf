@@ -2,16 +2,28 @@
 
 public abstract class Loggable
 {
-    public abstract string LogIdentifier { get; }
-    public virtual LogColor LogIdentifierColor { get; } = LogColor.white;
+    public abstract string LogTag { get; }
+    public virtual LogColor TagColor { get; } = LogColor.white;
 
-    public void Log(string message, bool withIdentifier = true, LogColor? messageColor = null)
+    /// <summary>
+    /// Logs the given message
+    /// </summary>
+    /// <param name="message">The message to log</param>
+    /// <param name="withTag">True to add the colorized Tag before the message, false otherwise</param>
+    /// <param name="messageColor">An optionnal color for the message (does not affect the tag)</param>
+    public void Log(string message, bool withTag = true, LogColor? messageColor = null)
     {
-        string identifier = withIdentifier ? $"{ApplyColor(LogIdentifier, LogIdentifierColor)} " : "";
+        string tag = withTag ? $"{ApplyColor(LogTag, TagColor)} " : "";
+
+        if (string.IsNullOrWhiteSpace(message))
+        {
+            Debug.Log($"{tag}\n\n");
+            return;
+        }
 
         if (messageColor == null)
         {
-            Debug.Log($"{identifier}{message}\n\n");
+            Debug.Log($"{tag}{message}\n\n");
             return;
         }
 
@@ -29,7 +41,7 @@ public abstract class Loggable
             restOfContent = message.Substring(fistLineDelimiter);
         }
 
-        Debug.Log($"{identifier}{ApplyColor(firstLineContent, messageColor)}{restOfContent}\n\n");
+        Debug.Log($"{tag}{ApplyColor(firstLineContent, messageColor)}{restOfContent}\n\n");
     }
 
     private string ApplyColor(string message, LogColor? color)
@@ -41,12 +53,12 @@ public abstract class Loggable
 
     public void LogWarning(string message)
     {
-        Debug.LogWarning(message);
+        Debug.LogWarning($"{LogTag} {message}");
     }
 
     public void LogError(string message)
     {
-        Debug.LogError(message);
+        Debug.LogError($"{LogTag} {message}");
     }    
 }
 

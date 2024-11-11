@@ -3,19 +3,20 @@
 /// </summary>
 public abstract class AState : Loggable, IState
 {
-    public override string LogIdentifier => $"[STATE {StateName}]";
+    public override string LogTag => $"[STATE {StateName}]";
 
     #region IState implementations
 
     public EStateName StateName { get; protected set; }
     public IStateMachine StateMachine { get; protected set; }
     public bool IsCurrentState { get; protected set; }
-    public EStateName DefaultNextStateName { get; protected set; } = EStateName.None;
+    public EStateName DefaultNextStateName { get; protected set; }
 
-    public AState(EStateName stateName, IStateMachine stateMachine)
+    public AState(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName)
     {
         StateName = stateName;
         StateMachine = stateMachine;
+        DefaultNextStateName = defaultNextStateName;
     }
 
     public virtual void Enter()
@@ -25,10 +26,10 @@ public abstract class AState : Loggable, IState
 
     public virtual void Update(float deltaTime) { }
 
-    public virtual void Exit(EStateName? nextState = null)
+    public virtual void Exit()
     {
         IsCurrentState = false;
-        StateMachine.ExitState(StateName, nextState ?? DefaultNextStateName);
+        StateMachine.ExitState(StateName, DefaultNextStateName);
     }
 
     #endregion      

@@ -7,7 +7,10 @@ public class GroupSkillsStateMachine : AStateMachineState
     private int currentSkillIndex;
     private GroupSkillState groupSkillState;
 
-    public GroupSkillsStateMachine(EStateName stateName, IStateMachine stateMachine) : base(stateName, stateMachine) { }
+    public GroupSkillsStateMachine(EStateName stateName, IStateMachine stateMachine, EStateName defaultNextStateName)
+        : base(stateName, stateMachine, defaultNextStateName)
+    {
+    }
 
     public override void InitializeMachine()
     {
@@ -16,7 +19,7 @@ public class GroupSkillsStateMachine : AStateMachineState
             StartingStateName = EStateName.Skill;
             DefaultNextStateName = EStateName.GeneralVote;
 
-            groupSkillState = new GroupSkillState(StartingStateName, this, 1);
+            groupSkillState = new GroupSkillState(StartingStateName, this, EStateName.Skill);
             SetState(groupSkillState);
 
             IsInitialized = true;
@@ -37,5 +40,11 @@ public class GroupSkillsStateMachine : AStateMachineState
 
         groupSkillState?.SetSkill(CurrentSkill);
         EnterState(CurrentStateName);
+    }
+
+    public override void Exit()
+    {
+        DefaultNextStateName = EStateName.GeneralVote;
+        base.Exit();
     }
 }

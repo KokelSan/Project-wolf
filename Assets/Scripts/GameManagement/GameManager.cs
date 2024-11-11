@@ -12,12 +12,13 @@ public class GameManager : MonoBehaviour
     public List<Player> Players { get; private set; }
 
     // Game resolution
+    public GameStateMachine StateMachine { get; private set; }
     public DistributionStrategy CurrentStrategy { get; private set; }
     public List<Player> AlivePlayers { get; private set; }
-    public List<Player> OrderedPlayersWithIndividualSkills { get; private set; }
     public List<List<Player>> PlayersWinningGroups { get; private set; }
-    public List<ASkillSO> OrderedGroupSkills { get; private set; }
-    public GameStateMachine StateMachine { get; private set; }
+    public List<Player> OrderedPlayersWithIndividualSkills { get; private set; }    
+    public List<ASkillSO> OrderedGroupSkills { get; private set; }    
+    public Dictionary<Player, List<RoundActionType>> PendingRoundActions { get; private set; }
 
     // End game
     public List<Player> WinningPlayers { get; private set; }
@@ -71,6 +72,26 @@ public class GameManager : MonoBehaviour
                 OrderedGroupSkills.Remove(groupSkill);
             }
         }
+    }
+
+    public void AddPendingAction(Player target, RoundActionType action)
+    {
+        if (!PendingRoundActions.ContainsKey(target))
+        {
+            PendingRoundActions[target] = new List<RoundActionType>();
+        }
+        PendingRoundActions[target].Add(action);
+    }
+
+    public void ResetPendingActions()
+    {
+        if (PendingRoundActions == null)
+        {
+            PendingRoundActions = new Dictionary<Player, List<RoundActionType>>();
+            return;
+        }
+
+        PendingRoundActions.Clear();
     }
 
     public void SetWinners(List<Player> winners)
@@ -178,13 +199,9 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Game resolution state machine completed !");
     }
 
-    private List<CharacterSO> GetCharactersWithGroupSkill(ASkillSO skill)
+    public void ResolvePendingActions()
     {
-        List<CharacterSO> characters = new List<CharacterSO>();
 
-        var charactersWithSkill = Players.Where(player => player.CharacterInstance.GroupSkills.Contains(skill)).ToList();
-
-        return characters;
     }
 
     #endregion
